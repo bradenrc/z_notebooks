@@ -1,0 +1,461 @@
+{
+  "paragraphs": [
+    {
+      "title": "Open the Folder with all Twitter JSON Objects",
+      "text": "import sqlContext.implicits._\n\nval twitterFiles \u003d sqlContext.read.json(\"/temp/twitter_data/\")\ntwitterFiles.registerTempTable(\"tweets\")\n",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "tableHide": false,
+        "title": true,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1438032840731_-194207904",
+      "id": "20150727-143400_1948609505",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import sqlContext.implicits._\ntwitterFiles: org.apache.spark.sql.DataFrame \u003d [contributors: string, coordinates: struct\u003ccoordinates:array\u003cdouble\u003e,type:string\u003e, created_at: string, entities: struct\u003chashtags:array\u003cstruct\u003cindices:array\u003cbigint\u003e,text:string\u003e\u003e,media:array\u003cstruct\u003cdisplay_url:string,expanded_url:string,id:bigint,id_str:string,indices:array\u003cbigint\u003e,media_url:string,media_url_https:string,sizes:struct\u003clarge:struct\u003ch:bigint,resize:string,w:bigint\u003e,medium:struct\u003ch:bigint,resize:string,w:bigint\u003e,small:struct\u003ch:bigint,resize:string,w:bigint\u003e,thumb:struct\u003ch:bigint,resize:string,w:bigint\u003e\u003e,source_status_id:bigint,source_status_id_str:string,type:string,url:string\u003e\u003e,symbols:array\u003cstruct\u003cindices:array\u003cbigint\u003e,text:string\u003e\u003e,trends:array\u003cstring\u003e,urls:array\u003cstruct\u003cdisplay_url:string,expanded_url:string,indices:array\u003cbig..."
+      },
+      "dateCreated": "Jul 27, 2015 2:34:00 PM",
+      "dateStarted": "Oct 13, 2015 3:05:51 PM",
+      "dateFinished": "Oct 13, 2015 3:06:40 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql\n\nselect count(*) from tweets\n",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1444775188578_846577962",
+      "id": "20151013-152628_1343789622",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "c0\n3096\n"
+      },
+      "dateCreated": "Oct 13, 2015 3:26:28 PM",
+      "dateStarted": "Oct 13, 2015 3:27:01 PM",
+      "dateFinished": "Oct 13, 2015 3:27:28 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Top 100 Players Metadata - Create Table",
+      "text": "\ncase class Player(Player: String, Position: String, Team: String, FirstName: String, LastName: String, FirstLast: String, ImageURL: String)\nval players \u003d sc.textFile(\"/temp/top100.csv\").mapPartitionsWithIndex { (idx, iter) \u003d\u003e if (idx \u003d\u003d 0) iter.drop(1) else iter }\nval playerstable \u003d players.map(_.split(\",\")).map(p \u003d\u003e Player(p(0),p(1),p(2),p(3),p(4),p(5),p(6))).toDF()\n\nplayerstable.registerTempTable(\"players\")",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "tableHide": false,
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1438378236434_1346126331",
+      "id": "20150731-143036_1273065961",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "defined class Player\nplayers: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[9] at mapPartitionsWithIndex at \u003cconsole\u003e:26\nplayerstable: org.apache.spark.sql.DataFrame \u003d [Player: string, Position: string, Team: string, FirstName: string, LastName: string, FirstLast: string, ImageURL: string]\n"
+      },
+      "dateCreated": "Jul 31, 2015 2:30:36 PM",
+      "dateStarted": "Oct 13, 2015 3:07:03 PM",
+      "dateFinished": "Oct 13, 2015 3:07:06 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Create SQL UDF for matching the Strings",
+      "text": "sqlContext.udf.register(\"matchStr\", (findthis: String, inthis: String ) \u003d\u003e inthis.toLowerCase() contains findthis.toLowerCase())",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1438383128276_-2144364429",
+      "id": "20150731-155208_883389856",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res7: org.apache.spark.sql.UserDefinedFunction \u003d UserDefinedFunction(\u003cfunction2\u003e,BooleanType)\n"
+      },
+      "dateCreated": "Jul 31, 2015 3:52:08 PM",
+      "dateStarted": "Oct 13, 2015 3:08:34 PM",
+      "dateFinished": "Oct 13, 2015 3:08:35 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Select the Count of Tweets per Player",
+      "text": "%sql\n\nselect Player, count(*) tweetcount  from tweets, players\nwhere matchStr(players.Player, tweets.text)\ngroup by Player\norder by tweetcount desc\n\n",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "pieChart",
+          "height": 374.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "Player",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "tweetcount",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "Player",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "title": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1438048586513_1703111598",
+      "id": "20150727-185626_528608850",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "Player\ttweetcount\n Tom Brady\t88\n Joe Haden\t29\n Aaron Rodgers\t15\n Russell Wilson\t13\n Dez Bryant\t12\n Tony Romo\t10\n Colin Kaepernick\t10\n Cam Newton\t10\n Drew Brees\t9\n Antonio Brown\t9\n Calvin Johnson\t8\n Marshawn Lynch\t7\n Eddie Lacy\t7\n Adrian Peterson\t7\n Jordy Nelson\t5\n Andrew Luck\t5\n Earl Thomas\t4\n Ben Roethlisberger\t4\n Darrelle Revis\t3\n Greg Hardy\t3\n Joe Thomas\t2\n Nick Foles\t2\n Brandon Marshall\t2\n DeMarco Murray\t2\n Demaryius Thomas\t2\n J.J. Watt\t2\n Philip Rivers\t1\n Jamaal Charles\t1\n Luke Kuechly\t1\n Matt Forte\t1\n Brent Grimes\t1\n NaVorro Bowman\t1\n Richard Sherman\t1\n Aldon Smith\t1\n Jimmy Graham\t1\n Wes Welker\t1\n Reggie Bush\t1\n Terrell Suggs\t1\n Josh Gordon\t1\n Alshon Jeffery\t1\n Daryl Washington\t1\n Andre Johnson\t1\n Joe Flacco\t1\n"
+      },
+      "dateCreated": "Jul 27, 2015 6:56:26 PM",
+      "dateStarted": "Oct 13, 2015 3:09:16 PM",
+      "dateFinished": "Oct 13, 2015 3:10:18 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Using Python create Sentiment Function and register for sQL",
+      "text": "%pyspark\n\nfrom textblob import TextBlob\n\ndef senti(text):\n    blob \u003d TextBlob(text)\n\n    for sentence in blob.sentences:\n        if sentence.sentiment.polarity \u003e 0:\n            return \u0027Positive\u0027\n        elif sentence.sentiment.polarity \u003c 0:\n            return \u0027Negative\u0027\n        else:\n            return \u0027Neutral\u0027\n\nsqlContext.registerFunction(\"senti\", senti)\n\nprint senti(\"This is a bad string\")\nprint senti(\"this is a positive string of happiness.\")\nprint senti(\"A lot of nothing\")\n",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 253.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "text",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "text",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "tableHide": false,
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1438384395338_-1127077422",
+      "id": "20150731-161315_711873448",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "Negative\nPositive\nNeutral\n"
+      },
+      "dateCreated": "Jul 31, 2015 4:13:15 PM",
+      "dateStarted": "Oct 13, 2015 3:12:04 PM",
+      "dateFinished": "Oct 13, 2015 3:12:04 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Determine Sentiment of Tweets for Tom Brady",
+      "text": "%sql\n\nselect  senti(text), count(*) as s\nfrom tweets, players\nwhere\nmatchStr(players.Player, tweets.text)\nand Player in (\u0027Tom Brady\u0027)\ngroup by senti(text)\n\n",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "pieChart",
+          "height": 248.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "c0",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "s",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "c0",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "s",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "title": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1438385516892_-331010046",
+      "id": "20150731-163156_1995992930",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "c0\ts\n"
+      },
+      "dateCreated": "Jul 31, 2015 4:31:56 PM",
+      "dateStarted": "Oct 13, 2015 3:12:44 PM",
+      "dateFinished": "Oct 13, 2015 3:14:31 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "create sQL function to parse date",
+      "text": "%pyspark\nfrom datetime import datetime\n\ndef datevalue(s):\n    lastb \u003d s.find(\" \", 20)\n    dv \u003d datetime.strptime(s[0:lastb],  \u0027%a %d %b %Y %H:%M:%S\u0027)\n    t \u003d {}\n    t[\"year\"] \u003d dv.year\n    t[\"month\"] \u003d dv.month\n    t[\"day\"] \u003d dv.day\n    return str(\"{}/{}/{}\").format(t[\"month\"],t[\"day\"],t[\"year\"])\n\nsqlContext.registerFunction(\"datevalue\", datevalue)",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1438702889915_921246451",
+      "id": "20150804-084129_1157593717",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": ""
+      },
+      "dateCreated": "Aug 4, 2015 8:41:29 AM",
+      "dateStarted": "Sep 9, 2015 8:56:03 AM",
+      "dateFinished": "Sep 9, 2015 8:56:03 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Create table with links to news",
+      "text": "%pyspark\n\n#load data\nnews_rdd \u003d sc.textFile(\"/temp/playerNews.csv\")\nnewskv \u003d news_rdd.map(lambda x: (x.split(\",\")[0], x.split(\",\")[1],x.split(\",\")[2],x.split(\",\")[3]))\n\nnewschema \u003d newskv.map(lambda x: Row(player\u003dx[0], article_date\u003dx[1], url\u003dx[2], formatdate\u003dstr(x[1].split(\" \")[2] + \" \" + x[1].split(\" \")[1]), title\u003dx[3]))\nnewstable \u003d sqlContext.createDataFrame(newschema)\nnewstable.registerTempTable(\"news\")\n",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1438385873531_-270667410",
+      "id": "20150731-163753_1428909624",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": ""
+      },
+      "dateCreated": "Jul 31, 2015 4:37:53 PM",
+      "dateStarted": "Sep 9, 2015 8:56:07 AM",
+      "dateFinished": "Sep 9, 2015 8:56:07 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Get a count of Articles by day for Tom Brady",
+      "text": "%sql\nselect \ndatevalue(article_date) as date, \ncount(*) as articles\nfrom news \nwhere player \u003d \"Tom Brady\"\ngroup by datevalue(article_date)\norder by date\n",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "lineChart",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "date",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "articles",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "date",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "articles",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1438701045661_825796431",
+      "id": "20150804-081045_1615176654",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "date\tarticles\n6/23/2015\t7\n6/24/2015\t4\n6/25/2015\t3\n6/26/2015\t1\n6/27/2015\t1\n6/28/2015\t2\n6/29/2015\t2\n6/30/2015\t3\n7/1/2015\t5\n7/14/2015\t3\n7/15/2015\t9\n7/16/2015\t1\n7/17/2015\t1\n7/18/2015\t1\n7/19/2015\t2\n7/2/2015\t1\n7/20/2015\t11\n7/21/2015\t9\n7/22/2015\t2\n7/23/2015\t1\n7/4/2015\t1\n"
+      },
+      "dateCreated": "Aug 4, 2015 8:10:45 AM",
+      "dateStarted": "Sep 9, 2015 8:56:51 AM",
+      "dateFinished": "Sep 9, 2015 8:56:52 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1438708082875_475325691",
+      "id": "20150804-100802_2089348476",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT"
+      },
+      "dateCreated": "Aug 4, 2015 10:08:02 AM",
+      "dateStarted": "Aug 20, 2015 6:37:57 PM",
+      "dateFinished": "Aug 20, 2015 6:37:57 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "Twitter Example 1",
+  "id": "2ATRKPKJG",
+  "angularObjects": {
+    "2ATDB6DPP": [],
+    "2ATX2UP3E": [],
+    "2ATJEEV3Z": [],
+    "2AUT5SWNG": [],
+    "2AV9JBN8B": [],
+    "2AUH78YGG": [],
+    "2AVK6ZW5M": [],
+    "2AW72AXBP": [],
+    "2AUV8UA7U": []
+  },
+  "config": {
+    "looknfeel": "simple"
+  },
+  "info": {}
+}

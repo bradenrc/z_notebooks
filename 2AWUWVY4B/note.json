@@ -1,0 +1,386 @@
+{
+  "paragraphs": [
+    {
+      "text": "import sqlContext.implicits._\n\nval twitterFiles \u003d sqlContext.read.json(\"/temp/costco/\")\ntwitterFiles.registerTempTable(\"tweets\")\n",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1438641851878_-620208128",
+      "id": "20150803-154411_894374586",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import sqlContext.implicits._\ntwitterFiles: org.apache.spark.sql.DataFrame \u003d [contributors: string, coordinates: struct\u003ccoordinates:array\u003cdouble\u003e,type:string\u003e, created_at: string, entities: struct\u003chashtags:array\u003cstruct\u003cindices:array\u003cbigint\u003e,text:string\u003e\u003e,media:array\u003cstruct\u003cdisplay_url:string,expanded_url:string,id:bigint,id_str:string,indices:array\u003cbigint\u003e,media_url:string,media_url_https:string,sizes:struct\u003clarge:struct\u003ch:bigint,resize:string,w:bigint\u003e,medium:struct\u003ch:bigint,resize:string,w:bigint\u003e,small:struct\u003ch:bigint,resize:string,w:bigint\u003e,thumb:struct\u003ch:bigint,resize:string,w:bigint\u003e\u003e,source_status_id:bigint,source_status_id_str:string,source_user_id:bigint,source_user_id_str:string,type:string,url:string\u003e\u003e,symbols:array\u003cstruct\u003cindices:array\u003cbigint\u003e,text:string\u003e\u003e,urls:array\u003cstruct\u003cdisplay_url:string,expanded_u..."
+      },
+      "dateCreated": "Aug 3, 2015 3:44:11 PM",
+      "dateStarted": "Sep 28, 2015 2:18:29 PM",
+      "dateFinished": "Sep 28, 2015 2:18:57 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql\n\nselect count(*) from tweets",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "c0",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "c0",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1442953963614_-710772173",
+      "id": "20150922-133243_1001118776",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "c0\n3221\n"
+      },
+      "dateCreated": "Sep 22, 2015 1:32:43 PM",
+      "dateStarted": "Sep 28, 2015 2:20:33 PM",
+      "dateFinished": "Sep 28, 2015 2:20:53 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\ntweet.printSchema()",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1442953975897_2008648377",
+      "id": "20150922-133255_1227354218",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "root\n |-- contributors: string (nullable \u003d true)\n |-- coordinates: struct (nullable \u003d true)\n |    |-- coordinates: array (nullable \u003d true)\n |    |    |-- element: double (containsNull \u003d true)\n |    |-- type: string (nullable \u003d true)\n |-- created_at: string (nullable \u003d true)\n |-- entities: struct (nullable \u003d true)\n |    |-- hashtags: array (nullable \u003d true)\n |    |    |-- element: struct (containsNull \u003d true)\n |    |    |    |-- indices: array (nullable \u003d true)\n |    |    |    |    |-- element: long (containsNull \u003d true)\n |    |    |    |-- text: string (nullable \u003d true)\n |    |-- media: array (nullable \u003d true)\n |    |    |-- element: struct (containsNull \u003d true)\n |    |    |    |-- display_url: string (nullable \u003d true)\n |    |    |    |-- expanded_url: string (nullable \u003d true)\n |    |    |    |-- id: long (nullable \u003d true)\n |    |    |    |-- id_str: string (nullable \u003d true)\n |    |    |    |-- indices: array (nullable \u003d true)\n |    |    |    |    |-- element: long (containsNull \u003d true)\n |    |    |    |-- media_url: string (nullable \u003d true)\n |    |    |    |-- media_url_https: string (nullable \u003d true)\n |    |    |    |-- sizes: struct (nullable \u003d true)\n |    |    |    |    |-- large: struct (nullable \u003d true)\n |    |    |    |    |    |-- h: long (nullable \u003d true)\n |    |    |    |    |    |-- resize: string (nullable \u003d true)\n |    |    |    |    |    |-- w: long (nullable \u003d true)\n |    |    |    |    |-- medium: struct (nullable \u003d true)\n |    |    |    |    |    |-- h: long (nullable \u003d true)\n |    |    |    |    |    |-- resize: string (nullable \u003d true)\n |    |    |    |    |    |-- w: long (nullable \u003d true)\n |    |    |    |    |-- small: struct (nullable \u003d true)\n |    |    |    |    |    |-- h: long (nullable \u003d true)\n |    |    |    |    |    |-- resize: string (nullable \u003d true)\n |    |    |    |    |    |-- w: long (nullable \u003d true)\n |    |    |    |    |-- thumb: struct (nullable \u003d true)\n |    |    |    |    |    |-- h: long (nullable \u003d true)\n |    |    |    |    |    |-- resize: string (nullable \u003d true)\n |    |    |    |    |    |-- w: long (nullable \u003d true)\n |    |    |    |-- source_status_id: long (nullable \u003d true)\n |    |    |    |-- source_status_id_str: string (nullable \u003d true)\n |    |    |    |-- source_user_id: long (nullable \u003d true)\n |    |    |    |-- source_user_id_str: string (nullable \u003d true)\n |    |    |    |-- type: string (nullable \u003d true)\n |    |    |    |-- url: string (nullable \u003d true)\n |    |-- symbols: array (nullable \u003d true)\n |    |    |-- element: struct (containsNull \u003d true)\n |    |    |    |-- indices: array (nullable \u003d true)\n |    |    |    |    |-- element: long (containsNull \u003d true)\n |    |    |    |-- text: string (nullable \u003d true)\n |    |-- urls: array (nullable \u003d true)\n |    |    |-- element: struct (containsNull \u003d true)\n |    |    |    |-- display_url: string (nullable \u003d true)\n |    |    |    |-- expanded_url: string (nullable \u003d true)\n |    |    |    |-- indices: array (nullable \u003d true)\n |    |    |    |    |-- element: long (containsNull \u003d true)\n |    |    |    |-- url: string (nullable \u003d true)\n |    |-- user_mentions: array (nullable \u003d true)\n |    |    |-- element: struct (containsNull \u003d true)\n |    |    |    |-- id: long (nullable \u003d true)\n |    |    |    |-- id_str: string (nullable \u003d true)\n |    |    |    |-- indices: array (nullable \u003d true)\n |    |    |    |    |-- element: long (containsNull \u003d true)\n |    |    |    |-- name: string (nullable \u003d true)\n |    |    |    |-- screen_name: string (nullable \u003d true)\n |-- favorite_count: long (nullable \u003d true)\n |-- favorited: boolean (nullable \u003d true)\n |-- geo: struct (nullable \u003d true)\n |    |-- coordinates: array (nullable \u003d true)\n |    |    |-- element: double (containsNull \u003d true)\n |    |-- type: string (nullable \u003d true)\n |-- id: long (nullable \u003d true)\n |-- id_str: string (nullable \u003d true)\n |-- in_reply_to_screen_name: string (nullable \u003d true)\n |-- in_reply_to_status_id: long (nullable \u003d true)\n |-- in_reply_to_status_id_str: string (nullable \u003d true)\n |-- in_reply_to_user_id: long (nullable \u003d true)\n |-- in_reply_to_user_id_str: string (nullable \u003d true)\n |-- is_quote_status: boolean (nullable \u003d true)\n |-- lang: string (nullable \u003d true)\n |-- metadata: struct (nullable \u003d true)\n |    |-- iso_language_code: string (nullable \u003d true)\n |    |-- result_type: string (nullable \u003d true)\n |-- place: struct (nullable \u003d true)\n |    |-- attributes: struct (nullable \u003d true)\n |    |-- bounding_box: struct (nullable \u003d true)\n |    |    |-- coordinates: array (nullable \u003d true)\n |    |    |    |-- element: array (containsNull \u003d true)\n |    |    |    |    |-- element: array (containsNull \u003d true)\n |    |    |    |    |    |-- element: double (containsNull \u003d true)\n |    |    |-- type: string (nullable \u003d true)\n |    |-- contained_within: array (nullable \u003d true)\n |    |    |-- element: string (containsNull \u003d true)\n |    |-- country: string (nullable \u003d true)\n |    |-- country_code: string (nullable \u003d true)\n |    |-- full_name: string (nullable \u003d true)\n |    |-- id: string (nullable \u003d true)\n |    |-- name: string (nullable \u003d true)\n |    |-- place_type: string (nullable \u003d true)\n |    |-- url: string (nullable \u003d true)\n |-- possibly_sensitive: boolean (nullable \u003d true)\n |-- quoted_status: struct (nullable \u003d true)\n |    |-- contributors: string (nullable \u003d true)\n |    |-- coordinates: string (nullable \u003d true)\n |    |-- created_at: string (nullable \u003d true)\n |    |-- entities: struct (nullable \u003d true)\n |    |    |-- hashtags: array (nullable \u003d true)\n |    |    |    |-- element: struct (containsNull \u003d true)\n |    |    |    |    |-- indices: array (nullable \u003d true)\n |    |    |    |    |    |-- element: long (containsNull \u003d true)\n |    |    |    |    |-- text: string (nullable \u003d true)\n |    |    |-- media: array (nullable \u003d true)\n |    |    |    |-- element: struct (containsNull \u003d true)\n |    |    |    |    |-- display_url: string (nullable \u003d true)\n |    |    |    |    |-- expanded_url: string (nullable \u003d true)\n |    |    |    |    |-- id: long (nullable \u003d true)\n |    |    |    |    |-- id_str: string (nullable \u003d true)\n |    |    |    |    |-- indices: array (nullable \u003d true)\n |    |    |    |    |    |-- element: long (containsNull \u003d true)\n |    |    |    |    |-- media_url: string (nullable \u003d true)\n |    |    |    |    |-- media_url_https: string (nullable \u003d true)\n |    |    |    |    |-- sizes: struct (nullable \u003d true)\n |    |    |    |    |    |-- large: struct (nullable \u003d true)\n |    |    |    |    |    |    |-- h: long (nullable \u003d true)\n |    |    |    |    |    |    |-- resize: string (nullable \u003d true)\n |    |    |    |    |    |    |-- w: long (nullable \u003d true)\n |    |    |    |    |    |-- medium: struct (nullable \u003d true)\n |    |    |    |    |    |    |-- h: long (nullable \u003d true)\n |    |    |    |    |    |    |-- resize: string (nullable \u003d true)\n |    |    |    |    |    |    |-- w: long (nullable \u003d true)\n |    |    |    |    |    |-- small: struct (nullable \u003d true)\n |    |    |    |    |    |    |-- h: long (nullable \u003d true)\n |    |    |    |    |    |    |-- resize: string (nullable \u003d true)\n |    |    |    |    |    |    |-- w: long (nullable \u003d true)\n |    |    |    |    |    |-- thumb: struct (nullable \u003d true)\n |    |    |    |    |    |    |-- h: long (nullable \u003d true)\n |    |    |    |    |    |    |-- resize: string (nullable \u003d true)\n |    |    |    |    |    |    |-- w: long (nullable \u003d true)\n |    |    |    |    |-- type: string (nullable \u003d true)\n |    |    |    |    |-- url: string (nullable \u003d true)\n |    |    |-- symbols: array (nullable \u003d true)\n |    |    |    |-- element: string (containsNull \u003d true)\n |    |    |-- urls: array (nullable \u003d true)\n |    |    |    |-- element: struct (containsNull \u003d true)\n |    |    |    |    |-- display_url: string (nullable \u003d true)\n |    |    |    |    |-- expanded_url: string (nullable \u003d true)\n |    |    |    |    |-- indices: array (nullable \u003d true)\n |    |    |    |    |    |-- element: long (containsNull \u003d true)\n |    |    |    |    |-- url: string (nullable \u003d true)\n |    |    |-- user_mentions: array (nullable \u003d true)\n |    |    |    |-- element: struct (containsNull \u003d true)\n |    |    |    |    |-- id: long (nullable \u003d true)\n |    |    |    |    |-- id_str: string (nullable \u003d true)\n |    |    |    |    |-- indices: array (nullable \u003d true)\n |    |    |    |    |    |-- element: long (containsNull \u003d true)\n |    |    |    |    |-- name: string (nullable \u003d true)\n |    |    |    |    |-- screen_name: string (nullable \u003d true)\n |    |-- favorite_count: long (nullable \u003d true)\n |    |-- favorited: boolean (nullable \u003d true)\n |    |-- geo: string (nullable \u003d true)\n |    |-- id: long (nullable \u003d true)\n |    |-- id_str: string (nullable \u003d true)\n |    |-- in_reply_to_screen_name: string (nullable \u003d true)\n |    |-- in_reply_to_status_id: string (nullable \u003d true)\n |    |-- in_reply_to_status_id_str: string (nullable \u003d true)\n |    |-- in_reply_to_user_id: string (nullable \u003d true)\n |    |-- in_reply_to_user_id_str: string (nullable \u003d true)\n |    |-- is_quote_status: boolean (nullable \u003d true)\n |    |-- lang: string (nullable \u003d true)\n |    |-- metadata: struct (nullable \u003d true)\n |    |    |-- iso_language_code: string (nullable \u003d true)\n |    |    |-- result_type: string (nullable \u003d true)\n |    |-- place: string (nullable \u003d true)\n |    |-- possibly_sensitive: boolean (nullable \u003d true)\n |    |-- retweet_count: long (nullable \u003d true)\n |    |-- retweeted: boolean (nullable \u003d true)\n |    |-- source: string (nullable \u003d true)\n |    |-- text: string (nullable \u003d true)\n |    |-- truncated: boolean (nullable \u003d true)\n |    |-- user: struct (nullable \u003d true)\n |    |    |-- contributors_enabled: boolean (nullable \u003d true)\n |    |    |-- created_at: string (nullable \u003d true)\n |    |    |-- default_profile: boolean (nullable \u003d true)\n |    |    |-- default_profile_image: boolean (nullable \u003d true)\n |    |    |-- description: string (nullable \u003d true)\n |    |    |-- entities: struct (nullable \u003d true)\n |    |    |    |-- description: struct (nullable \u003d true)\n |    |    |    |    |-- urls: array (nullable \u003d true)\n |    |    |    |    |    |-- element: struct (containsNull \u003d true)\n |    |    |    |    |    |    |-- display_url: string (nullable \u003d true)\n |    |    |    |    |    |    |-- expanded_url: string (nullable \u003d true)\n |    |    |    |    |    |    |-- indices: array (nullable \u003d true)\n |    |    |    |    |    |    |    |-- element: long (containsNull \u003d true)\n |    |    |    |    |    |    |-- url: string (nullable \u003d true)\n |    |    |    |-- url: struct (nullable \u003d true)\n |    |    |    |    |-- urls: array (nullable \u003d true)\n |    |    |    |    |    |-- element: struct (containsNull \u003d true)\n |    |    |    |    |    |    |-- display_url: string (nullable \u003d true)\n |    |    |    |    |    |    |-- expanded_url: string (nullable \u003d true)\n |    |    |    |    |    |    |-- indices: array (nullable \u003d true)\n |    |    |    |    |    |    |    |-- element: long (containsNull \u003d true)\n |    |    |    |    |    |    |-- url: string (nullable \u003d true)\n |    |    |-- favourites_count: long (nullable \u003d true)\n |    |    |-- follow_request_sent: boolean (nullable \u003d true)\n |    |    |-- followers_count: long (nullable \u003d true)\n |    |    |-- following: boolean (nullable \u003d true)\n |    |    |-- friends_count: long (nullable \u003d true)\n |    |    |-- geo_enabled: boolean (nullable \u003d true)\n |    |    |-- has_extended_profile: boolean (nullable \u003d true)\n |    |    |-- id: long (nullable \u003d true)\n |    |    |-- id_str: string (nullable \u003d true)\n |    |    |-- is_translation_enabled: boolean (nullable \u003d true)\n |    |    |-- is_translator: boolean (nullable \u003d true)\n |    |    |-- lang: string (nullable \u003d true)\n |    |    |-- listed_count: long (nullable \u003d true)\n |    |    |-- location: string (nullable \u003d true)\n |    |    |-- name: string (nullable \u003d true)\n |    |    |-- notifications: boolean (nullable \u003d true)\n |    |    |-- profile_background_color: string (nullable \u003d true)\n |    |    |-- profile_background_image_url: string (nullable \u003d true)\n |    |    |-- profile_background_image_url_https: string (nullable \u003d true)\n |    |    |-- profile_background_tile: boolean (nullable \u003d true)\n |    |    |-- profile_banner_url: string (nullable \u003d true)\n |    |    |-- profile_image_url: string (nullable \u003d true)\n |    |    |-- profile_image_url_https: string (nullable \u003d true)\n |    |    |-- profile_link_color: string (nullable \u003d true)\n |    |    |-- profile_sidebar_border_color: string (nullable \u003d true)\n |    |    |-- profile_sidebar_fill_color: string (nullable \u003d true)\n |    |    |-- profile_text_color: string (nullable \u003d true)\n |    |    |-- profile_use_background_image: boolean (nullable \u003d true)\n |    |    |-- protected: boolean (nullable \u003d true)\n |    |    |-- screen_name: string (nullable \u003d true)\n |    |    |-- statuses_count: long (nullable \u003d true)\n |    |    |-- time_zone: string (nullable \u003d true)\n |    |    |-- url: string (nullable \u003d true)\n |    |    |-- utc_offset: long (nullable \u003d true)\n |    |    |-- verified: boolean (nullable \u003d true)\n |-- quoted_status_id: long (nullable \u003d true)\n |-- quoted_status_id_str: string (nullable \u003d true)\n |-- retweet_count: long (nullable \u003d true)\n |-- retweeted: boolean (nullable \u003d true)\n |-- retweeted_status: struct (nullable \u003d true)\n |    |-- contributors: string (nullable \u003d true)\n |    |-- coordinates: string (nullable \u003d true)\n |    |-- created_at: string (nullable \u003d true)\n |    |-- entities: struct (nullable \u003d true)\n |    |    |-- hashtags: array (nullable \u003d true)\n |    |    |    |-- element: struct (containsNull \u003d true)\n |    |    |    |    |-- indices: array (nullable \u003d true)\n |    |    |    |    |    |-- element: long (containsNull \u003d true)\n |    |    |    |    |-- text: string (nullable \u003d true)\n |    |    |-- media: array (nullable \u003d true)\n |    |    |    |-- element: struct (containsNull \u003d true)\n |    |    |    |    |-- display_url: string (nullable \u003d true)\n |    |    |    |    |-- expanded_url: string (nullable \u003d true)\n |    |    |    |    |-- id: long (nullable \u003d true)\n |    |    |    |    |-- id_str: string (nullable \u003d true)\n |    |    |    |    |-- indices: array (nullable \u003d true)\n |    |    |    |    |    |-- element: long (containsNull \u003d true)\n |    |    |    |    |-- media_url: string (nullable \u003d true)\n |    |    |    |    |-- media_url_https: string (nullable \u003d true)\n |    |    |    |    |-- sizes: struct (nullable \u003d true)\n |    |    |    |    |    |-- large: struct (nullable \u003d true)\n |    |    |    |    |    |    |-- h: long (nullable \u003d true)\n |    |    |    |    |    |    |-- resize: string (nullable \u003d true)\n |    |    |    |    |    |    |-- w: long (nullable \u003d true)\n |    |    |    |    |    |-- medium: struct (nullable \u003d true)\n |    |    |    |    |    |    |-- h: long (nullable \u003d true)\n |    |    |    |    |    |    |-- resize: string (nullable \u003d true)\n |    |    |    |    |    |    |-- w: long (nullable \u003d true)\n |    |    |    |    |    |-- small: struct (nullable \u003d true)\n |    |    |    |    |    |    |-- h: long (nullable \u003d true)\n |    |    |    |    |    |    |-- resize: string (nullable \u003d true)\n |    |    |    |    |    |    |-- w: long (nullable \u003d true)\n |    |    |    |    |    |-- thumb: struct (nullable \u003d true)\n |    |    |    |    |    |    |-- h: long (nullable \u003d true)\n |    |    |    |    |    |    |-- resize: string (nullable \u003d true)\n |    |    |    |    |    |    |-- w: long (nullable \u003d true)\n |    |    |    |    |-- type: string (nullable \u003d true)\n |    |    |    |    |-- url: string (nullable \u003d true)\n |    |    |-- symbols: array (nullable \u003d true)\n |    |    |    |-- element: struct (containsNull \u003d true)\n |    |    |    |    |-- indices: array (nullable \u003d true)\n |    |    |    |    |    |-- element: long (containsNull \u003d true)\n |    |    |    |    |-- text: string (nullable \u003d true)\n |    |    |-- urls: array (nullable \u003d true)\n |    |    |    |-- element: struct (containsNull \u003d true)\n |    |    |    |    |-- display_url: string (nullable \u003d true)\n |    |    |    |    |-- expanded_url: string (nullable \u003d true)\n |    |    |    |    |-- indices: array (nullable \u003d true)\n |    |    |    |    |    |-- element: long (containsNull \u003d true)\n |    |    |    |    |-- url: string (nullable \u003d true)\n |    |    |-- user_mentions: array (nullable \u003d true)\n |    |    |    |-- element: struct (containsNull \u003d true)\n |    |    |    |    |-- id: long (nullable \u003d true)\n |    |    |    |    |-- id_str: string (nullable \u003d true)\n |    |    |    |    |-- indices: array (nullable \u003d true)\n |    |    |    |    |    |-- element: long (containsNull \u003d true)\n |    |    |    |    |-- name: string (nullable \u003d true)\n |    |    |    |    |-- screen_name: string (nullable \u003d true)\n |    |-- favorite_count: long (nullable \u003d true)\n |    |-- favorited: boolean (nullable \u003d true)\n |    |-- geo: string (nullable \u003d true)\n |    |-- id: long (nullable \u003d true)\n |    |-- id_str: string (nullable \u003d true)\n |    |-- in_reply_to_screen_name: string (nullable \u003d true)\n |    |-- in_reply_to_status_id: long (nullable \u003d true)\n |    |-- in_reply_to_status_id_str: string (nullable \u003d true)\n |    |-- in_reply_to_user_id: long (nullable \u003d true)\n |    |-- in_reply_to_user_id_str: string (nullable \u003d true)\n |    |-- is_quote_status: boolean (nullable \u003d true)\n |    |-- lang: string (nullable \u003d true)\n |    |-- metadata: struct (nullable \u003d true)\n |    |    |-- iso_language_code: string (nullable \u003d true)\n |    |    |-- result_type: string (nullable \u003d true)\n |    |-- place: struct (nullable \u003d true)\n |    |    |-- attributes: struct (nullable \u003d true)\n |    |    |-- bounding_box: struct (nullable \u003d true)\n |    |    |    |-- coordinates: array (nullable \u003d true)\n |    |    |    |    |-- element: array (containsNull \u003d true)\n |    |    |    |    |    |-- element: array (containsNull \u003d true)\n |    |    |    |    |    |    |-- element: double (containsNull \u003d true)\n |    |    |    |-- type: string (nullable \u003d true)\n |    |    |-- contained_within: array (nullable \u003d true)\n |    |    |    |-- element: string (containsNull \u003d true)\n |    |    |-- country: string (nullable \u003d true)\n |    |    |-- country_code: string (nullable \u003d true)\n |    |    |-- full_name: string (nullable \u003d true)\n |    |    |-- id: string (nullable \u003d true)\n |    |    |-- name: string (nullable \u003d true)\n |    |    |-- place_type: string (nullable \u003d true)\n |    |    |-- url: string (nullable \u003d true)\n |    |-- possibly_sensitive: boolean (nullable \u003d true)\n |    |-- quoted_status: struct (nullable \u003d true)\n |    |    |-- contributors: string (nullable \u003d true)\n |    |    |-- coordinates: string (nullable \u003d true)\n |    |    |-- created_at: string (nullable \u003d true)\n |    |    |-- entities: struct (nullable \u003d true)\n |    |    |    |-- hashtags: array (nullable \u003d true)\n |    |    |    |    |-- element: string (containsNull \u003d true)\n |    |    |    |-- symbols: array (nullable \u003d true)\n |    |    |    |    |-- element: string (containsNull \u003d true)\n |    |    |    |-- urls: array (nullable \u003d true)\n |    |    |    |    |-- element: string (containsNull \u003d true)\n |    |    |    |-- user_mentions: array (nullable \u003d true)\n |    |    |    |    |-- element: string (containsNull \u003d true)\n |    |    |-- favorite_count: long (nullable \u003d true)\n |    |    |-- favorited: boolean (nullable \u003d true)\n |    |    |-- geo: string (nullable \u003d true)\n |    |    |-- id: long (nullable \u003d true)\n |    |    |-- id_str: string (nullable \u003d true)\n |    |    |-- in_reply_to_screen_name: string (nullable \u003d true)\n |    |    |-- in_reply_to_status_id: string (nullable \u003d true)\n |    |    |-- in_reply_to_status_id_str: string (nullable \u003d true)\n |    |    |-- in_reply_to_user_id: string (nullable \u003d true)\n |    |    |-- in_reply_to_user_id_str: string (nullable \u003d true)\n |    |    |-- is_quote_status: boolean (nullable \u003d true)\n |    |    |-- lang: string (nullable \u003d true)\n |    |    |-- metadata: struct (nullable \u003d true)\n |    |    |    |-- iso_language_code: string (nullable \u003d true)\n |    |    |    |-- result_type: string (nullable \u003d true)\n |    |    |-- place: string (nullable \u003d true)\n |    |    |-- retweet_count: long (nullable \u003d true)\n |    |    |-- retweeted: boolean (nullable \u003d true)\n |    |    |-- source: string (nullable \u003d true)\n |    |    |-- text: string (nullable \u003d true)\n |    |    |-- truncated: boolean (nullable \u003d true)\n |    |-- quoted_status_id: long (nullable \u003d true)\n |    |-- quoted_status_id_str: string (nullable \u003d true)\n |    |-- retweet_count: long (nullable \u003d true)\n |    |-- retweeted: boolean (nullable \u003d true)\n |    |-- source: string (nullable \u003d true)\n |    |-- text: string (nullable \u003d true)\n |    |-- truncated: boolean (nullable \u003d true)\n |    |-- user: struct (nullable \u003d true)\n |    |    |-- contributors_enabled: boolean (nullable \u003d true)\n |    |    |-- created_at: string (nullable \u003d true)\n |    |    |-- default_profile: boolean (nullable \u003d true)\n |    |    |-- default_profile_image: boolean (nullable \u003d true)\n |    |    |-- description: string (nullable \u003d true)\n |    |    |-- entities: struct (nullable \u003d true)\n |    |    |    |-- description: struct (nullable \u003d true)\n |    |    |    |    |-- urls: array (nullable \u003d true)\n |    |    |    |    |    |-- element: struct (containsNull \u003d true)\n |    |    |    |    |    |    |-- display_url: string (nullable \u003d true)\n |    |    |    |    |    |    |-- expanded_url: string (nullable \u003d true)\n |    |    |    |    |    |    |-- indices: array (nullable \u003d true)\n |    |    |    |    |    |    |    |-- element: long (containsNull \u003d true)\n |    |    |    |    |    |    |-- url: string (nullable \u003d true)\n |    |    |    |-- url: struct (nullable \u003d true)\n |    |    |    |    |-- urls: array (nullable \u003d true)\n |    |    |    |    |    |-- element: struct (containsNull \u003d true)\n |    |    |    |    |    |    |-- display_url: string (nullable \u003d true)\n |    |    |    |    |    |    |-- expanded_url: string (nullable \u003d true)\n |    |    |    |    |    |    |-- indices: array (nullable \u003d true)\n |    |    |    |    |    |    |    |-- element: long (containsNull \u003d true)\n |    |    |    |    |    |    |-- url: string (nullable \u003d true)\n |    |    |-- favourites_count: long (nullable \u003d true)\n |    |    |-- follow_request_sent: boolean (nullable \u003d true)\n |    |    |-- followers_count: long (nullable \u003d true)\n |    |    |-- following: boolean (nullable \u003d true)\n |    |    |-- friends_count: long (nullable \u003d true)\n |    |    |-- geo_enabled: boolean (nullable \u003d true)\n |    |    |-- has_extended_profile: boolean (nullable \u003d true)\n |    |    |-- id: long (nullable \u003d true)\n |    |    |-- id_str: string (nullable \u003d true)\n |    |    |-- is_translation_enabled: boolean (nullable \u003d true)\n |    |    |-- is_translator: boolean (nullable \u003d true)\n |    |    |-- lang: string (nullable \u003d true)\n |    |    |-- listed_count: long (nullable \u003d true)\n |    |    |-- location: string (nullable \u003d true)\n |    |    |-- name: string (nullable \u003d true)\n |    |    |-- notifications: boolean (nullable \u003d true)\n |    |    |-- profile_background_color: string (nullable \u003d true)\n |    |    |-- profile_background_image_url: string (nullable \u003d true)\n |    |    |-- profile_background_image_url_https: string (nullable \u003d true)\n |    |    |-- profile_background_tile: boolean (nullable \u003d true)\n |    |    |-- profile_banner_url: string (nullable \u003d true)\n |    |    |-- profile_image_url: string (nullable \u003d true)\n |    |    |-- profile_image_url_https: string (nullable \u003d true)\n |    |    |-- profile_link_color: string (nullable \u003d true)\n |    |    |-- profile_sidebar_border_color: string (nullable \u003d true)\n |    |    |-- profile_sidebar_fill_color: string (nullable \u003d true)\n |    |    |-- profile_text_color: string (nullable \u003d true)\n |    |    |-- profile_use_background_image: boolean (nullable \u003d true)\n |    |    |-- protected: boolean (nullable \u003d true)\n |    |    |-- screen_name: string (nullable \u003d true)\n |    |    |-- statuses_count: long (nullable \u003d true)\n |    |    |-- time_zone: string (nullable \u003d true)\n |    |    |-- url: string (nullable \u003d true)\n |    |    |-- utc_offset: long (nullable \u003d true)\n |    |    |-- verified: boolean (nullable \u003d true)\n |-- source: string (nullable \u003d true)\n |-- text: string (nullable \u003d true)\n |-- truncated: boolean (nullable \u003d true)\n |-- user: struct (nullable \u003d true)\n |    |-- contributors_enabled: boolean (nullable \u003d true)\n |    |-- created_at: string (nullable \u003d true)\n |    |-- default_profile: boolean (nullable \u003d true)\n |    |-- default_profile_image: boolean (nullable \u003d true)\n |    |-- description: string (nullable \u003d true)\n |    |-- entities: struct (nullable \u003d true)\n |    |    |-- description: struct (nullable \u003d true)\n |    |    |    |-- urls: array (nullable \u003d true)\n |    |    |    |    |-- element: struct (containsNull \u003d true)\n |    |    |    |    |    |-- display_url: string (nullable \u003d true)\n |    |    |    |    |    |-- expanded_url: string (nullable \u003d true)\n |    |    |    |    |    |-- indices: array (nullable \u003d true)\n |    |    |    |    |    |    |-- element: long (containsNull \u003d true)\n |    |    |    |    |    |-- url: string (nullable \u003d true)\n |    |    |-- url: struct (nullable \u003d true)\n |    |    |    |-- urls: array (nullable \u003d true)\n |    |    |    |    |-- element: struct (containsNull \u003d true)\n |    |    |    |    |    |-- display_url: string (nullable \u003d true)\n |    |    |    |    |    |-- expanded_url: string (nullable \u003d true)\n |    |    |    |    |    |-- indices: array (nullable \u003d true)\n |    |    |    |    |    |    |-- element: long (containsNull \u003d true)\n |    |    |    |    |    |-- url: string (nullable \u003d true)\n |    |-- favourites_count: long (nullable \u003d true)\n |    |-- follow_request_sent: boolean (nullable \u003d true)\n |    |-- followers_count: long (nullable \u003d true)\n |    |-- following: boolean (nullable \u003d true)\n |    |-- friends_count: long (nullable \u003d true)\n |    |-- geo_enabled: boolean (nullable \u003d true)\n |    |-- has_extended_profile: boolean (nullable \u003d true)\n |    |-- id: long (nullable \u003d true)\n |    |-- id_str: string (nullable \u003d true)\n |    |-- is_translation_enabled: boolean (nullable \u003d true)\n |    |-- is_translator: boolean (nullable \u003d true)\n |    |-- lang: string (nullable \u003d true)\n |    |-- listed_count: long (nullable \u003d true)\n |    |-- location: string (nullable \u003d true)\n |    |-- name: string (nullable \u003d true)\n |    |-- notifications: boolean (nullable \u003d true)\n |    |-- profile_background_color: string (nullable \u003d true)\n |    |-- profile_background_image_url: string (nullable \u003d true)\n |    |-- profile_background_image_url_https: string (nullable \u003d true)\n |    |-- profile_background_tile: boolean (nullable \u003d true)\n |    |-- profile_banner_url: string (nullable \u003d true)\n |    |-- profile_image_url: string (nullable \u003d true)\n |    |-- profile_image_url_https: string (nullable \u003d true)\n |    |-- profile_link_color: string (nullable \u003d true)\n |    |-- profile_sidebar_border_color: string (nullable \u003d true)\n |    |-- profile_sidebar_fill_color: string (nullable \u003d true)\n |    |-- profile_text_color: string (nullable \u003d true)\n |    |-- profile_use_background_image: boolean (nullable \u003d true)\n |    |-- protected: boolean (nullable \u003d true)\n |    |-- screen_name: string (nullable \u003d true)\n |    |-- statuses_count: long (nullable \u003d true)\n |    |-- time_zone: string (nullable \u003d true)\n |    |-- url: string (nullable \u003d true)\n |    |-- utc_offset: long (nullable \u003d true)\n |    |-- verified: boolean (nullable \u003d true)\n\n"
+      },
+      "dateCreated": "Sep 22, 2015 1:32:55 PM",
+      "dateStarted": "Sep 28, 2015 2:08:21 PM",
+      "dateFinished": "Sep 28, 2015 2:08:21 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql\nselect  user.name, max(user.friends_count) as friends from tweets group by user.name order by friends desc",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "multiBarChart",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "name",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "friends",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "name",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "friends",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1443472866202_-774591949",
+      "id": "20150928-134106_1113274296",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "name\tfriends\nEddy yquemas\t100914\nOptimum Nutrition\t36167\nTony Michael\t35899\nCivil Eats\t31334\nLucas_Wyrsch\t27262\nFloridaFishnJournal\t16708\nClass Action Report\t15627\nJohnsonville\t15548\nMajor Victor Bravo\t14168\nMyriam Selbig\t13677\nCasa Martinez Salsa\t12915\nLivingWellCheaply\t12847\nThe Senior List\t12472\nDevilryFun\t11274\nInsiderTradingWire\t6919\nLexi\t6624\nDenise Natishan\t6265\nHeather Nolan\t5979\nDayTrading Ninja\t5891\nPaul Jimerson\t5828\nDwight Culver M.B.A\t5760\nWendy Sparrow\t5758\nEmily Hope Allyn\t5701\nमार्गदर्शन\t4795\nChris - Posts Deals\t4433\nGoneklippingkrazy\t4331\nComrade ☭ Hound\t4201\nRTS\t4113\nRegina Phalange\t3956\ncaki\t3902\nDavey Crockofit\t3881\nOximity Human Rights\t3601\nPaul Devereaux\t3454\nShopping Deals HQ\t3172\ncitizen dickbag\t3024\nMO\t2993\nSoldHerSoul\t2950\nTaffy_Apple\t2796\nNora McManus\t2704\nWonder Women \t2663\nThe Deal \t2595\nTheSolidTrader\t2582\nTopFiveTraders\t2565\nRather-Be-Shopping\t2522\nC A\t2302\nKenny G Baby\t2280\nTrading365\t2279\nApril\t2231\nTimes \u0026 Transcript\t2216\nEarthbound Farm\t2208\nblashpemy\t2130\nMuttley Matt\t2122\nKnowProphet\t2100\nShara Marie\t2082\nDerek MacEwen\t2042\nDeal News Bot\t2038\nMyNameIsPappyG\t2035\nInvestors Hangout\t2020\nMookie Blaylock\t2001\nUSA Customers\t2001\nRosamar\t2001\nCountry Checker\t2000\nfcb97\t2000\nNolonger Victims\t1999\nHelen\t1995\nBonnie Mercado\t1988\nDow Jones 365\t1982\nHouston Debate\t1978\nFucking Life\t1977\nJustin Staggs\t1972\nMyNinjaTurtle\t1970\nMyles Jerrod Scott\t1952\nThe Champ\t1926\nM. Morel-Ensminger\t1923\nThe # Queen\t1923\nDr. Bing Hoppus\t1917\nRachel Coronho \t1852\nDANASIAN\t1848\nNASDAQ News\t1844\nAlbert T\t1838\nJoreen Belocura\t1835\nRobert Morton\t1833\nTravelaviator\t1823\nPatrick Rooney\t1818\nMcMannofthepeople\t1813\nDeej\t1800\nRose Hall\t1790\nDavid Conway\t1782\nSpike Spiegel \t1776\nRichard Champion\t1765\nTallahassee FL\t1741\nRebecca\t1736\ndons\t1673\nwally\t1672\nstrader55\t1649\njust plain beth...\t1628\nHashTopiX\t1571\nEgbert Oostburg\t1571\nSECRecruitWire\t1562\nPumpkin Disaster\t1561\nAnnaWest\t1560\nBarbara Ling\t1552\nNoah\t1537\nHilary Ratner\t1521\nJesse Green\t1511\nGoldslipper\t1506\nAdelina W\t1474\njacqui Q\t1415\nKris actually\t1414\nAles \u0026 Aliens\t1411\nBetsy Fitzgerald\t1378\nRACHELYS E.E.E.\t1363\nTetsuya Mori\t1351\nJohn A. Hammack, Jr.\t1347\nPseudo Fred \t1319\nEna Goquiolay\t1293\nJulie Pile\t1289\nJackson Fox\t1265\nMetro Gnome\t1257\nAustin Jobs\t1252\nTheStreet\t1251\nrockel\t1233\nAntonio Gonzalez\t1198\nCanada LavaHotDeals\t1192\nduke.of.affection\t1187\nHumble \t1169\nZachary Cobb\t1153\ndoug E. jokes\t1135\nStephen Zachman\t1134\nbarbee cain\t1118\nMilani Plumbing\t1107\nChristopher Banks\t1106\nIt\u0027s just Sara™\t1105\nDeadHedge\t1101\nHouston Wong Ⓥ\t1087\nαnnαlee\t1087\nZoë Eckman\t1085\nGrand Ridge Plaza\t1070\nJon Malone\t1065\nFaisal Misle\t1054\nlori aratani\t1030\nJo\t1014\nMichelle K.\t1011\nPerishableNews\t1002\nJim Bob Cooter \t999\nBrian Garces (CMP)\t996\nCarlos Mendoza\t995\nAustin Osborne\t984\nJMR Capital Markets\t984\nAccounting Seattle\t979\n Bang\t978\nBlake Murphy\t974\nGet Forex Alerts\t963\nCaptain AMAB\t957\nJimmy Guwoppalo\t946\nMiki K\t939\nJohn Pe\t914\nStupid Hoofy Hands\t910\nalexa.\t908\nThe Weekday\t907\nstockmarketnow\t907\nDennyT\t894\nBaked Potato\t880\nAmber Khan\t870\nKen Botts\t870\nMeewa\t867\no\t866\nHotoonA\t865\nmeredith c. kerekes\t862\nJeff Bulosan\t843\nRomulon\t837\nMicheledb\t815\nBallersClubMadden\t795\nHAL\t794\nLaura G.\t787\nBob Wertz\t782\nT\t771\nYair Arellanos\t748\nLylyhec\t747\nDow Jones \t746\nLorne Corbett\t746\nJasonOneKidd\t742\nFood For Life Baking\t733\nSol ♡ \t725\nfrazgo\t721\nDaryl Horner\t721\nՏҽӀíղɑ ƘվӀҽ\t703\nTippy\t703\nRyan Tarkowski\t702\nChris Wallace\t694\nNicole Dice\t692\nMikayla Valdez\t690\nIG: JamesPrince44\t683\nMaryBeth Matzek\t674\nVideocache\t672\n420 then AcunaMatata\t663\nSan Jose Left Shark\t663\nHILTONDOLL;*\t661\nSippyCupsandBooze\t656\nalexzia jade\t655\nHeauxtep\t649\nmarian\t646\nRay Williams\t646\nKim Lawlor\t644\nCraig Dougherty\t639\nAllegra Scarano\t637\nkylie.\t636\nDeVante\t634\nPeter\t630\ndandelions\t628\nhector srsly\t623\nRay Jackson\t623\nTroy\t618\nNic\t618\nUgarte@Ghettoblaster\t608\nWill Quintanilla\t604\narya miller\t601\nBACtrack\t600\nCristina Childs\t597\nJET LIFE ✈️\t593\nFrugal Genius\t584\nRisss\t580\nThe Greek\t578\nJohn (J.D.) Keith\t577\nJohnnySoftware\t573\nshosh\t560\nSweater Yams \t555\nLauren Dennehy\t552\nFargo Jones\t549\n•fabuchi•\t547\n♫\t545\nShhhhhhhh\t541\nBrandy\t538\nsenpai sally♡\t538\nBrand Bogard\t537\nStock Forums\t536\n.\t534\nEmily ☆\t530\nMarzain \t526\nsoy un taco\t524\nNor\t522\nKylie Ann\t521\nKatherine Bellofiore\t520\nLaur(no)en \t516\nYsa\t516\nMATT_LAZCRU\t516\nAndrew Rodriguez\t507\nseputartrading\t502\nSarah Ballantyne\t501\nKemi\t500\nIH NASDAQ OMX\t500\nScott Anderson\t497\nPolgarStocks\t497\nleahanne\t497\nbec\t496\nStock_Tracker\t496\nlookn4wins\t495\nPetrelli Reviews\t494\nSinclair James \t490\nclayton\t490\nJake13\t489\nSonomaHumaneSociety\t489\nJesse Taber\t488\nJohnboy\t487\nShelli King\t486\nDerrick O\u0027Toole\t484\nChristian the Lion\t484\nManti Python\t479\nKatie Godwin\t479\nGeoff?\t478\nMiranda Rochol\t466\nThe BryPie\t458\nAtheistBYUfan\t458\nNikol Red\t458\nDanny Cervantes\t457\nAlison Cargin\t453\nโฟนคนดีชอบถี่ตามอง.\t452\nChris Turpin\t446\nKateForIan\t442\nChristy Oldenkamp\t441\nspring del figgalo\t440\nPatti Nichols\t433\nCamilla\t431\nShamus\t429\nSHIZA SALMAN\t428\nWonderfully Made\t425\nBrandon Mariano\t424\nalexis\t421\nMrs. Quan\t420\nshaflames\t418\nKitchen Whisperer\t417\nArif Tuksal\t409\nTaylor Robbins\t408\nRJ\t407\nRobert\t406\nAbby Wallace\t400\nJake Eardley\t399\n❦Sweet P❦\t397\nGreg Gibson\t397\nYMidtownL\t395\nJosh Noble \t395\nMichelle Dooddle\t393\njeffvolkmer\t393\nP Fine\t392\nNick Cage\t391\nDarla Thole\t391\nAdam Van Kampen\t391\n#IAMDIGITAL\t386\nAnthony K Murray\t385\nTracey Ryniec\t384\nLulu\t380\n♃ Isz ♀ Janeway ♆\t380\nsteph\t380\nAJ\t377\nKarla Pacheco\t376\nIman\t371\nAllison Joan\t369\nToni Parker\t369\n@\t368\nJim Cramer\t366\nEric McNulty\t364\nErikah\t364\nTay⚽️\t360\nGenesis RareDiamonds\t358\nLetterPressChocolate\t357\nThomas\t354\nTheresaInSD\t352\nTUTUZ\t347\nNikkiNikkiNikki\t345\nmatts benson\t344\nSluterella\t344\nEduardo\t337\nSaul@DealConcierge\t336\nD\t334\nSandy\t330\nFlorida DEP News\t328\nron johnson✨\t327\ndriftmasterkyle\t327\nDan M\t324\nMolly Burns\t323\nJD\t320\nTLG.\t318\nUngnome\t316\nCalvin\t315\n9 DAYS TILL TABINOF!\t314\nBusinessNews\t312\nAndrew Cox\t308\nRoxanne Dropps\t308\nCass A Nova ✩☽\t307\n☃\t305\ncubedreamer\t304\ncumming\t302\nDreamweasel\t299\nShannon Bower\t298\nLawrence Medel\t296\nOctober 8th\t294\nMike Dognose\t294\nHashtag... or else.\t291\nTahoe\t290\nSeth Macfarlane\t289\nNick Panda\t288\ntammy\t288\nTierney Nevitt\t287\nYour Drunk Tio\t287\nrachel\t286\nMurat\t284\nLouis Archie\t283\nRebekah Ellis\t283\nKrys\t282\nJim Cramer News\t282\nJennifer Jaochico\t281\nmbf\t281\ngab\t280\npot mommy\t280\nB.\t276\nMatthew Prescott\t274\nIndy Colts 1-2\t274\nMike\t273\nBenji Kirk\t271\nBrian Cohen\t269\nSarah J. Maas\t265\nDanny\t264\nCancun Centro\t264\none punch bae ˋ㉨ˊ\t261\nXzania ♡\t261\nhot cakes\t261\nDani Randall\t261\nRIOT SUGAR\t260\nRaymond Louie\t259\nYung-I Chang\t258\nWait For It\t257\nIvy AF\t256\namy\t256\nBeardless Yoruba\t254\nMade Whole\t253\nsleepingKelly\t249\nBill Godfrey\t246\nBarbie•\t246\njesus\t246\nMorgan \t245\nPascal Vescio\t243\njennifer lowe\t241\nDaily Economy\t240\nnico lay\t239\nxX_DiO-DeStRoYeR_Xx\t238\nGenevieve Rainy\t237\nChantal\t235\nDiana Zaragoza\t233\nWayne Rash\t233\nBendrick Lamar\t232\nPonce\t230\nHelen Baratiak\t230\nRaul Meza\t226\nSeeking Alpha\t224\nTom Isaksen\t222\nMARK\t222\nHoma S. Woodrum\t221\ndrew \t219\nboss\t214\nSam Warnes\t209\nImpeTyga\t209\nPresident Carter\t208\nDonk Humpington\t204\nnatalie.\t200\nTesabella McEachern☮\t199\nKeaton Tucker\t197\nRafael Cabrales\t194\nMichele  d°-°b\t194\nMJ Fantasy News\t193\nMarissa Sanchez\t192\nCoffee Otter\t190\nKate\t187\nYuer Boi\t187\nLeigh Shilton\t187\nAyan Owens\t186\nAdri\t185\nLauren\t185\nvanessa♡♡\t182\nSarah Hachey-Dole\t182\nKaitlin McKinnon\t181\ndarknessbender\t180\nMXP\t180\nCharesse\t178\nKim Morrison\t177\nRoshanak Pilram\t176\nChris Kovacs\t175\nRyan J. Phillips\t175\nAlicia Rose\t175\nInsaneDealz\t170\nbabyshoes neverworn\t170\nVoula Cicchelli NNCP\t169\nxoe\t169\ncomedyreporter\t166\nDEALighted.com\t165\nTabitha Huizinga\t164\nA$H\t163\nIts Kevrin Dude\t163\nchristina\t161\nteryn\t159\nαudreα.\t156\nMarket Scan\t155\nMilutin Dragićević\t155\nChris\t155\nPeach\t153\nTy Keeble\t153\nNet Deals\t150\nJasmine Nicole\t150\nJudy Kim Edwards\t149\nLivvy\t149\nEspi\t146\nchink\t144\nGugligon\t144\nTheStreet TV\t144\nSabrina \t142\nMax\t140\nAva\t139\nMichael Bergstrom\t138\nPriscilla.\t133\nJosh\t132\nBusiness Lunchbox\t131\nMonty Cosme\t130\nFrank\t128\nJim Peel\t124\nmahurich\t122\nAlx Dool\t121\nPayLayAle\t121\nJulie Meyer\t120\nSandra Hawk\t120\nDojo\t114\nPaul Shapiro\t114\nAlanna\t114\nJesus Suverza\t114\nBi-Han\t113\nRicardo Lopez\t112\nMimi\t110\nMK\t110\nLet it Snow ❄\t107\nCelaena ☆\t107\nRon Howard\t107\nshelba c. sinsel\t105\nEbonie \t105\nKanyon Holt\t104\nFercho el Milusos \t104\nCourtney Rundell\t103\nKristin\t103\nTaibas Jones\t102\nDaily Stocks News\t101\njohn wright\t97\nM BB J J \t96\nDaniel Warshaw\t95\nmiyu @ freshman15\t95\nlarries are a cult\t93\nrapunzil tan\t91\nBarbie Lehman\t90\n_Jannnel\t89\nLisa Shapiro\t88\nUSC GSC\t87\npaulino\t85\nThe Cavalry\t85\nSharae Boyd\t84\nDave MacDougall\t83\nDaily Bitching\t82\nMaria\t81\nAngela Lee\t80\nGiovana\t80\nRed\t80\n#mia  \t78\nMegHAM\t73\nMichael Cox\t70\nBrandon\t68\nRoxi Heart\t68\nB. Ghost\t66\njoey\t64\nalaskan49\t63\nbreanna\t63\nAll News World\t59\nRosa isabel Acuna\t58\ndonovan\t55\nStock News Herald\t54\nLuiz Felipe Scolari\t54\nDaniel Brown\t53\nAnthony DeJager\t52\ncfdmart\t51\nMeghan Traverse\t50\nHP McLovincraft\t49\nNur\t48\nhardball1018\t47\nThur5day\t44\nmssmoney_1\t44\nEneida Rivera\t43\nlourdes_08\t43\nW. Lightnin Guthrie\t42\nGreg\t42\nHeru C.\t41\nAudacity Capital\t41\nDaily #Finance\t40\nLinda Yelver\t40\ntc\t40\nTradups\t38\nLukito Abraham\t38\nJackie\t35\nMeral Properties\t35\nThe Regular Guy\t28\nRohaib Garstin\t28\nmatt schwab\t28\nalan edgett\t28\nHeard on the Street\t27\nWallStreet Scope\t26\nVictor E. Sasson\t24\nPerishable News\t24\nⓚⓡⓘⓢⓣⓔⓝ\t24\nmagic portal\t23\nBusiness News\t21\nCezary Poplawski\t21\nMLB Bloggers\t20\nInfo 24 US\t18\n24365News USA\t17\nThe Simo Show\t17\nRyan\t17\nFrugal Hotspot\t16\nSomereed Happiness\t14\nJack Dale\t13\nChelsaMillers\t13\nJosh Levins\t13\nStitch Weise\t13\nLatest News\t13\nОля Таркан\t13\nGriselda Nunez\t11\nTurner Collins\t11\nCactus Hugs\t11\nBidBookDNA™\t11\nCharlotte Jackson\t10\n$Stocknewsalerts\t10\nNicki \t10\nThe Shop Vancouver\t8\nJared A. Sisneroz\t8\nNGCG\t8\nLee Scott\t8\nEverything LA\t8\nMaverick Masterland\t7\nユリ ユキ \t7\nJShore\t6\nFlck\t6\nProVesting\t6\nSerena\t6\nBullFax.com Markets\t6\nZop.Org\t5\nProTradersNews\t5\nreddit4Tim\t4\nEcon Digest\t4\nJesus L. Revels\t3\nonefx\t3\nCuoxiong\t2\nSite24x7Alerts\t1\nSheryl Smith\t0\nAmex Offers\t0\nAnalyst Actions\t0\nKeith Davis\t0\nStone\t0\nRichards\t0\nYvonne Williams\t0\nFinance News London\t0\nsiudeal\t0\nN A\t0\nRay Carter\t0\n#USABizHour\t0\n"
+      },
+      "dateCreated": "Sep 28, 2015 1:41:06 PM",
+      "dateStarted": "Sep 28, 2015 1:46:58 PM",
+      "dateFinished": "Sep 28, 2015 1:48:36 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\nval tweet_friends \u003d sqlContext.sql(\"SELECT user.friends_count FROM tweets\")\n\ntweet_friends.show()\n",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1443472955334_-653862872",
+      "id": "20150928-134235_1968256784",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "tweet_friends: org.apache.spark.sql.DataFrame \u003d [friends_count: bigint]\n+-------------+\n|friends_count|\n+-------------+\n|          674|\n|          674|\n|          674|\n|          674|\n|          105|\n|          105|\n|          105|\n|           17|\n|           17|\n|           17|\n|           17|\n|           17|\n|           17|\n|           17|\n|          101|\n|          101|\n|          101|\n|          101|\n|          101|\n|          380|\n+-------------+\n\n"
+      },
+      "dateCreated": "Sep 28, 2015 1:42:35 PM",
+      "dateStarted": "Sep 28, 2015 2:27:33 PM",
+      "dateFinished": "Sep 28, 2015 2:27:49 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql\n\nselect  user.friends_count as fc, count(*) as tweet_count\nFROM tweets\nwhere user.friends_count \u003c 5000\ngroup by user.friends_count",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "scatterChart",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "fc",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "tweet_count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "fc",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "tweet_count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1443473925585_-1749077190",
+      "id": "20150928-135845_1131346880",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "fc\ttweet_count\n431\t3\n2231\t3\n232\t8\n1833\t2\n433\t3\n233\t7\n4433\t8\n1233\t7\n634\t8\n35\t13\n2035\t2\n1835\t2\n235\t7\n636\t2\n637\t6\n837\t6\n237\t7\n2038\t8\n38\t14\n1838\t4\n238\t4\n239\t8\n639\t4\n240\t7\n40\t12\n440\t2\n41\t12\n241\t2\n441\t7\n42\t12\n442\t6\n2042\t8\n243\t8\n43\t7\n843\t6\n44\t6\n1844\t7\n644\t3\n245\t6\n246\t10\n446\t8\n646\t13\n47\t6\n1848\t1\n48\t4\n1649\t3\n649\t3\n49\t2\n249\t2\n50\t2\n1251\t8\n51\t5\n452\t1\n1852\t8\n1252\t7\n52\t8\n453\t3\n53\t2\n253\t5\n1054\t5\n54\t10\n3454\t5\n254\t4\n55\t4\n655\t8\n256\t5\n656\t7\n1257\t3\n257\t4\n457\t7\n58\t2\n258\t7\n458\t23\n259\t8\n59\t7\n260\t8\n261\t21\n661\t8\n862\t7\n663\t15\n2663\t6\n63\t18\n64\t3\n264\t13\n865\t8\n265\t8\n1065\t7\n1265\t8\n866\t6\n466\t8\n66\t2\n867\t1\n68\t11\n269\t8\n870\t8\n1070\t7\n70\t1\n271\t1\n471\t7\n1672\t7\n672\t6\n273\t7\n73\t8\n1673\t3\n274\t6\n674\t4\n1474\t4\n276\t7\n78\t6\n478\t3\n479\t10\n2279\t7\n880\t8\n80\t13\n2280\t4\n280\t10\n3881\t2\n281\t13\n81\t7\n2082\t3\n282\t6\n82\t5\n683\t4\n83\t2\n283\t9\n484\t9\n84\t6\n284\t2\n1085\t6\n85\t16\n486\t2\n286\t6\n87\t3\n1087\t10\n287\t9\n487\t7\n88\t8\n288\t14\n488\t4\n1289\t3\n289\t3\n89\t8\n489\t10\n290\t4\n90\t8\n490\t11\n690\t7\n91\t2\n291\t7\n692\t8\n1293\t7\n93\t4\n294\t10\n894\t7\n494\t7\n694\t2\n495\t7\n95\t8\n496\t12\n296\t8\n96\t1\n497\t22\n97\t8\n298\t6\n299\t4\n500\t9\n2100\t7\n501\t7\n101\t5\n1101\t7\n302\t4\n502\t7\n702\t8\n3902\t1\n2302\t4\n102\t6\n103\t8\n703\t10\n104\t15\n2704\t7\n304\t6\n1105\t8\n105\t10\n305\t7\n1106\t2\n1506\t8\n107\t23\n1107\t5\n307\t7\n907\t16\n507\t7\n308\t15\n908\t7\n110\t8\n910\t6\n1511\t8\n312\t6\n112\t6\n4113\t7\n113\t8\n914\t4\n314\t8\n114\t22\n315\t8\n316\t4\n516\t20\n1917\t2\n318\t7\n1118\t7\n1319\t8\n120\t12\n520\t4\n320\t6\n121\t14\n1521\t8\n721\t11\n521\t7\n2122\t4\n122\t1\n522\t2\n2522\t8\n1923\t11\n323\t8\n124\t8\n324\t4\n524\t6\n725\t8\n1926\t6\n526\t4\n327\t10\n328\t1\n128\t7\n530\t8\n330\t2\n2130\t8\n130\t2\n131\t1\n4331\t4\n132\t7\n733\t3\n133\t4\n334\t7\n534\t8\n1134\t8\n1135\t3\n536\t7\n1736\t3\n336\t3\n1537\t4\n537\t4\n337\t2\n138\t7\n538\t5\n139\t8\n939\t1\n140\t3\n1741\t3\n541\t8\n142\t8\n742\t8\n344\t9\n144\t11\n545\t4\n345\t4\n746\t5\n946\t6\n146\t6\n1347\t8\n747\t4\n347\t4\n547\t8\n748\t7\n549\t7\n149\t9\n2950\t6\n150\t4\n1351\t5\n552\t8\n1552\t2\n352\t8\n1952\t2\n1153\t8\n153\t14\n354\t4\n155\t11\n555\t2\n156\t7\n3956\t7\n957\t8\n357\t6\n358\t4\n159\t6\n360\t5\n1560\t2\n560\t8\n1561\t8\n161\t4\n1562\t1\n1363\t8\n163\t10\n963\t7\n364\t15\n164\t3\n2565\t5\n1765\t7\n165\t3\n366\t8\n166\t1\n368\t2\n1169\t8\n369\t12\n169\t7\n1970\t4\n170\t10\n771\t2\n371\t8\n1571\t4\n3172\t8\n1972\t7\n573\t8\n974\t1\n175\t21\n376\t3\n176\t8\n1776\t4\n377\t7\n177\t8\n1977\t8\n577\t3\n1378\t3\n178\t8\n1978\t8\n978\t4\n578\t3\n979\t1\n180\t10\n380\t12\n580\t8\n181\t8\n782\t8\n182\t10\n1782\t4\n2582\t5\n1982\t7\n984\t13\n584\t4\n384\t7\n385\t4\n185\t13\n386\t5\n186\t2\n1187\t1\n187\t10\n787\t3\n1988\t5\n1790\t7\n190\t6\n391\t11\n392\t6\n192\t7\n1192\t2\n393\t14\n193\t1\n2993\t5\n593\t2\n794\t1\n194\t9\n795\t1\n4795\t1\n2595\t8\n395\t9\n1995\t7\n995\t8\n2796\t4\n996\t1\n197\t6\n397\t8\n597\t4\n1198\t7\n1999\t2\n999\t7\n399\t1\n199\t1\n2000\t12\n600\t7\n0\t57\n400\t4\n1800\t7\n200\t7\n2001\t24\n4201\t4\n1\t3\n601\t2\n3601\t8\n2\t2\n1002\t8\n3\t13\n604\t8\n4\t10\n204\t1\n5\t7\n6\t23\n406\t4\n407\t8\n7\t9\n408\t1\n208\t6\n608\t2\n2208\t2\n8\t26\n409\t2\n209\t10\n10\t5\n1411\t5\n11\t17\n1011\t6\n1813\t4\n13\t25\n214\t7\n1414\t1\n1014\t2\n14\t6\n815\t7\n1415\t4\n16\t2\n2216\t6\n17\t13\n417\t6\n618\t13\n18\t1\n418\t6\n1818\t8\n219\t3\n20\t2\n2020\t7\n420\t3\n21\t14\n221\t2\n421\t7\n222\t14\n1823\t4\n623\t3\n23\t8\n224\t7\n3024\t2\n24\t24\n424\t2\n425\t7\n226\t7\n26\t6\n27\t7\n28\t21\n1628\t4\n428\t2\n628\t8\n429\t3\n230\t7\n1030\t7\n630\t7\n"
+      },
+      "dateCreated": "Sep 28, 2015 1:58:45 PM",
+      "dateStarted": "Sep 28, 2015 3:44:56 PM",
+      "dateFinished": "Sep 28, 2015 3:47:01 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql\n\nselect count(*) from tweets where user.friends_count \u003e ${maxFriends\u003d1000} \n\n",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "c0",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "c0",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          }
+        }
+      },
+      "settings": {
+        "params": {
+          "maxFriends": "100"
+        },
+        "forms": {
+          "maxFriends": {
+            "name": "maxFriends",
+            "defaultValue": "1000",
+            "hidden": false
+          }
+        }
+      },
+      "jobName": "paragraph_1443476039485_875513408",
+      "id": "20150928-143359_425424037",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "c0\n2644\n"
+      },
+      "dateCreated": "Sep 28, 2015 2:33:59 PM",
+      "dateStarted": "Sep 28, 2015 2:47:03 PM",
+      "dateFinished": "Sep 28, 2015 2:47:27 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql\nselect  \nuser.friends_count as fc, \ncount(id) as tweet_count \nFROM tweets \ngroup by user.friends_count \nhaving count(id) \u003c 50\n",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "pieChart",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "tweet_count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "fc",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "fc",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "tweet_count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1443476401328_-536593320",
+      "id": "20150928-144001_916357478",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "fc\ttweet_count\n431\t3\n2231\t3\n232\t8\n1833\t2\n433\t3\n233\t7\n4433\t8\n1233\t7\n634\t8\n35\t13\n2035\t2\n1835\t2\n235\t7\n636\t2\n637\t6\n837\t6\n237\t7\n2038\t8\n38\t14\n1838\t4\n238\t4\n239\t8\n639\t4\n240\t7\n40\t12\n440\t2\n41\t12\n241\t2\n441\t7\n42\t12\n442\t6\n2042\t8\n243\t8\n43\t7\n843\t6\n44\t6\n1844\t7\n644\t3\n245\t6\n246\t10\n446\t8\n646\t13\n47\t6\n12847\t8\n1848\t1\n48\t4\n1649\t3\n649\t3\n49\t2\n249\t2\n50\t2\n1251\t8\n51\t5\n452\t1\n1852\t8\n1252\t7\n52\t8\n453\t3\n53\t2\n253\t5\n1054\t5\n54\t10\n3454\t5\n254\t4\n55\t4\n655\t8\n256\t5\n656\t7\n1257\t3\n257\t4\n457\t7\n58\t2\n258\t7\n458\t23\n259\t8\n59\t7\n260\t8\n261\t21\n661\t8\n27262\t5\n862\t7\n663\t15\n2663\t6\n63\t18\n64\t3\n264\t13\n865\t8\n6265\t3\n265\t8\n1065\t7\n1265\t8\n866\t6\n466\t8\n66\t2\n867\t1\n68\t11\n269\t8\n870\t8\n1070\t7\n70\t1\n271\t1\n471\t7\n1672\t7\n672\t6\n12472\t8\n273\t7\n73\t8\n7073\t8\n1673\t3\n274\t6\n11274\t3\n674\t4\n1474\t4\n276\t7\n13677\t2\n78\t6\n478\t3\n479\t10\n2279\t7\n880\t8\n80\t13\n2280\t4\n280\t10\n3881\t2\n281\t13\n81\t7\n2082\t3\n282\t6\n82\t5\n683\t4\n83\t2\n283\t9\n484\t9\n84\t6\n284\t2\n1085\t6\n85\t16\n486\t2\n286\t6\n87\t3\n1087\t10\n287\t9\n487\t7\n88\t8\n288\t14\n488\t4\n1289\t3\n289\t3\n89\t8\n489\t10\n290\t4\n90\t8\n490\t11\n690\t7\n5891\t5\n91\t2\n291\t7\n692\t8\n1293\t7\n93\t4\n294\t10\n894\t7\n494\t7\n694\t2\n495\t7\n95\t8\n496\t12\n296\t8\n96\t1\n497\t22\n97\t8\n298\t6\n299\t4\n35899\t8\n500\t9\n2100\t7\n5701\t3\n501\t7\n101\t5\n1101\t7\n302\t4\n502\t7\n702\t8\n3902\t1\n2302\t4\n102\t6\n103\t8\n703\t10\n104\t15\n2704\t7\n304\t6\n1105\t8\n105\t10\n305\t7\n1106\t2\n1506\t8\n107\t23\n1107\t5\n307\t7\n907\t16\n507\t7\n308\t15\n908\t7\n16708\t1\n110\t8\n910\t6\n1511\t8\n312\t6\n112\t6\n4113\t7\n113\t8\n914\t4\n100914\t1\n314\t8\n114\t22\n315\t8\n12915\t8\n316\t4\n516\t20\n1917\t2\n318\t7\n1118\t7\n6919\t3\n1319\t8\n120\t12\n520\t4\n320\t6\n121\t14\n1521\t8\n721\t11\n521\t7\n2122\t4\n122\t1\n522\t2\n2522\t8\n1923\t11\n323\t8\n124\t8\n324\t4\n524\t6\n725\t8\n1926\t6\n526\t4\n327\t10\n328\t1\n128\t7\n530\t8\n330\t2\n2130\t8\n130\t2\n131\t1\n4331\t4\n132\t7\n733\t3\n133\t4\n334\t7\n534\t8\n1134\t8\n31334\t1\n1135\t3\n536\t7\n1736\t3\n336\t3\n1537\t4\n537\t4\n337\t2\n138\t7\n538\t5\n139\t8\n939\t1\n140\t3\n1741\t3\n541\t8\n142\t8\n742\t8\n344\t9\n144\t11\n545\t4\n345\t4\n746\t5\n946\t6\n146\t6\n1347\t8\n747\t4\n347\t4\n547\t8\n748\t7\n15548\t8\n549\t7\n149\t9\n2950\t6\n150\t4\n1351\t5\n552\t8\n1552\t2\n352\t8\n1952\t2\n1153\t8\n153\t14\n354\t4\n155\t11\n555\t2\n156\t7\n3956\t7\n957\t8\n357\t6\n358\t4\n5758\t1\n159\t6\n360\t5\n1560\t2\n5760\t7\n560\t8\n1561\t8\n161\t4\n1562\t1\n1363\t8\n163\t10\n963\t7\n364\t15\n164\t3\n2565\t5\n1765\t7\n165\t3\n366\t8\n166\t1\n36167\t1\n14168\t2\n368\t2\n1169\t8\n369\t12\n169\t7\n1970\t4\n170\t10\n771\t2\n371\t8\n1571\t4\n3172\t8\n1972\t7\n573\t8\n974\t1\n175\t21\n376\t3\n176\t8\n1776\t4\n377\t7\n177\t8\n1977\t8\n577\t3\n1378\t3\n178\t8\n1978\t8\n978\t4\n578\t3\n5979\t4\n979\t1\n180\t10\n380\t12\n580\t8\n181\t8\n782\t8\n182\t10\n1782\t4\n2582\t5\n1982\t7\n984\t13\n584\t4\n384\t7\n385\t4\n185\t13\n386\t5\n186\t2\n1187\t1\n187\t10\n787\t3\n1988\t5\n1790\t7\n190\t6\n391\t11\n392\t6\n192\t7\n1192\t2\n393\t14\n193\t1\n2993\t5\n593\t2\n794\t1\n194\t9\n795\t1\n4795\t1\n2595\t8\n395\t9\n1995\t7\n995\t8\n2796\t4\n996\t1\n197\t6\n397\t8\n597\t4\n1198\t7\n1999\t2\n999\t7\n399\t1\n199\t1\n2000\t12\n600\t7\n400\t4\n1800\t7\n200\t7\n2001\t24\n4201\t4\n1\t3\n601\t2\n3601\t8\n2\t2\n1002\t8\n3\t13\n604\t8\n4\t10\n204\t1\n5\t7\n6\t23\n406\t4\n407\t8\n7\t9\n408\t1\n208\t6\n608\t2\n2208\t2\n8\t26\n409\t2\n209\t10\n10\t5\n1411\t5\n11\t17\n1011\t6\n1813\t4\n13\t25\n214\t7\n1414\t1\n1014\t2\n14\t6\n815\t7\n1415\t4\n16\t2\n2216\t6\n17\t13\n417\t6\n618\t13\n18\t1\n418\t6\n1818\t8\n219\t3\n20\t2\n2020\t7\n420\t3\n21\t14\n221\t2\n421\t7\n222\t14\n1823\t4\n623\t3\n23\t8\n6624\t7\n224\t7\n3024\t2\n24\t24\n424\t2\n425\t7\n226\t7\n26\t6\n15627\t8\n27\t7\n5828\t2\n28\t21\n1628\t4\n428\t2\n628\t8\n429\t3\n230\t7\n1030\t7\n630\t7\n"
+      },
+      "dateCreated": "Sep 28, 2015 2:40:01 PM",
+      "dateStarted": "Sep 28, 2015 3:11:10 PM",
+      "dateFinished": "Sep 28, 2015 3:13:05 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1443476910485_-1387737797",
+      "id": "20150928-144830_305586284",
+      "dateCreated": "Sep 28, 2015 2:48:30 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "Costco_1",
+  "id": "2AWUWVY4B",
+  "angularObjects": {
+    "2ATDB6DPP": [],
+    "2ATX2UP3E": [],
+    "2ATJEEV3Z": [],
+    "2AUT5SWNG": [],
+    "2AV9JBN8B": [],
+    "2AUH78YGG": [],
+    "2AVK6ZW5M": [],
+    "2AW72AXBP": [],
+    "2AUV8UA7U": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

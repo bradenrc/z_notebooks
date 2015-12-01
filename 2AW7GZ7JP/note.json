@@ -1,0 +1,754 @@
+{
+  "paragraphs": [
+    {
+      "text": "%pyspark\n\nscores_raw_rdd \u003d sc.textFile(\"/temp/nfl_weather/football_scores.csv\")\n\nscores_raw_rdd_split \u003d scores_raw_rdd.map(lambda x: x.replace(\"\\\"\", \"\").split(\",\")) #split the rows by comma\n\ndef RepresentsInt(s):\n    try: \n        int(s)\n        return True\n    except ValueError:\n        return False\n        \ndef game_location(winning_team, losing_team, indicator):\n    if indicator \u003d\u003d \"@\":\n        return losing_team\n    if indicator \u003d\u003d \"\":\n        return winning_team\n    else:\n        return \"\"\n\n\nscores_raw_rdd_split \u003d  scores_raw_rdd_split.filter(lambda x: RepresentsInt(x[1]))\nscores_raw_schema \u003d scores_raw_rdd_split.map(lambda x: Row(year\u003dx[0],WeekDay\u003dx[2],Day\u003dx[3],winning_team\u003dx[5],location_ind\u003dgame_location(x[5],x[7],x[6]),losing_team\u003dx[7],points_winner\u003dx[8],points_loser\u003dx[9],yards_winner\u003dx[10],turnovers_winner\u003dx[11],yards_loser\u003dx[12],turnovers_loser\u003dx[13]))\n\nscores_raw_df  \u003d sqlContext.createDataFrame(scores_raw_schema)\nscores_raw_df.registerTempTable(\"scores_raw\")\n",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1438641855918_977269305",
+      "id": "20150803-154415_467248319",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": ""
+      },
+      "dateCreated": "Aug 3, 2015 3:44:15 PM",
+      "dateStarted": "Nov 10, 2015 9:55:08 AM",
+      "dateFinished": "Nov 10, 2015 9:55:09 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql\n\nselect winning_team, count(*) wins\nfrom scores_raw\ngroup by winning_team\norder by wins desc",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "multiBarChart",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "winning_team",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "wins",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "winning_team",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          }
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1446742993147_-90373000",
+      "id": "20151105-090313_620427927",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "winning_team\twins\nDallas Cowboys\t461\nPittsburgh Steelers\t446\nSan Francisco 49ers\t437\nMinnesota Vikings\t430\nGreen Bay Packers\t424\nDenver Broncos\t413\nMiami Dolphins\t412\nWashington Redskins\t405\nNew England Patriots\t392\nPhiladelphia Eagles\t392\nChicago Bears\t379\nNew York Giants\t376\nKansas City Chiefs\t344\nSan Diego Chargers\t338\nCleveland Browns\t329\nNew Orleans Saints\t329\nAtlanta Falcons\t328\nCincinnati Bengals\t327\nBuffalo Bills\t323\nDetroit Lions\t319\nNew York Jets\t314\nSeattle Seahawks\t309\nIndianapolis Colts\t267\nLos Angeles Rams\t256\nOakland Raiders\t250\nTampa Bay Buccaneers\t239\nHouston Oilers\t182\nBaltimore Ravens\t171\nCarolina Panthers\t158\nSt. Louis Cardinals\t152\nJacksonville Jaguars\t149\nArizona Cardinals\t145\nBaltimore Colts\t141\nSt. Louis Rams\t139\nTennessee Titans\t135\nLos Angeles Raiders\t118\nHouston Texans\t91\nPhoenix Cardinals\t32\nTennessee Oilers\t16\nBoston Patriots\t2\n"
+      },
+      "dateCreated": "Nov 5, 2015 9:03:13 AM",
+      "dateStarted": "Nov 10, 2015 9:55:12 AM",
+      "dateFinished": "Nov 10, 2015 9:55:13 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql\nselect\n    winning_team,\n    sum(wins) / count(year) as Average_Wins\nfrom\n    (select\n        winning_team,\n        year,\n        count(*) as wins\n    from scores_raw\n    group by winning_team, year) w\ngroup by winning_team\norder by Average_Wins desc\n",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "multiBarChart",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "winning_team",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "Average_Wins",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "winning_team",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          }
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1446745663127_-1864062737",
+      "id": "20151105-094743_2002662151",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "winning_team\tAverage_Wins\nLos Angeles Raiders\t9.076923076923077\nDallas Cowboys\t9.03921568627451\nDenver Broncos\t8.978260869565217\nMiami Dolphins\t8.956521739130435\nPittsburgh Steelers\t8.745098039215685\nNew England Patriots\t8.71111111111111\nSan Francisco 49ers\t8.568627450980392\nBaltimore Ravens\t8.55\nLos Angeles Rams\t8.533333333333333\nMinnesota Vikings\t8.431372549019608\nIndianapolis Colts\t8.34375\nGreen Bay Packers\t8.313725490196079\nTennessee Oilers\t8.0\nWashington Redskins\t7.9411764705882355\nTennessee Titans\t7.9411764705882355\nBaltimore Colts\t7.833333333333333\nSeattle Seahawks\t7.725\nPhiladelphia Eagles\t7.686274509803922\nOakland Raiders\t7.575757575757576\nCarolina Panthers\t7.523809523809524\nKansas City Chiefs\t7.478260869565218\nChicago Bears\t7.431372549019608\nNew York Giants\t7.372549019607843\nSan Diego Chargers\t7.3478260869565215\nCincinnati Bengals\t7.108695652173913\nJacksonville Jaguars\t7.095238095238095\nBuffalo Bills\t7.021739130434782\nCleveland Browns\t6.854166666666667\nNew York Jets\t6.826086956521739\nHouston Oilers\t6.7407407407407405\nNew Orleans Saints\t6.714285714285714\nSt. Louis Rams\t6.619047619047619\nSt. Louis Cardinals\t6.608695652173913\nArizona Cardinals\t6.590909090909091\nAtlanta Falcons\t6.56\nHouston Texans\t6.5\nDetroit Lions\t6.38\nTampa Bay Buccaneers\t6.128205128205129\nPhoenix Cardinals\t5.333333333333333\nBoston Patriots\t2.0\n"
+      },
+      "dateCreated": "Nov 5, 2015 9:47:43 AM",
+      "dateStarted": "Nov 7, 2015 11:47:59 AM",
+      "dateFinished": "Nov 7, 2015 11:48:04 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\nurl \u003d \"https://en.wikipedia.org/wiki/National_Football_League\"\npage \u003d requests.get(url)\ntree \u003d html.fromstring(page.text)\ntable \u003d tree.xpath(\u0027//table[@class\u003d\"navbox plainrowheaders wikitable\"]/tr\u0027)\n\n\ncounter \u003d 1\nteam \u003d []\nteam_all \u003d []\n\nfor tr in table:\n    for td in tr:\n        if counter \u003e 10:\n            val \u003d td.text_content()\n            val \u003d val.encode(\u0027utf-8\u0027, errors\u003d\"replace\")\n            val \u003d str(val).decode(\u0027unicode_escape\u0027).encode(\u0027ascii\u0027,\u0027ignore\u0027).replace(\"*\", \"\")\n            val \u003d str(val)\n            if val in [\"North\", \"South\", \"West\", \"East\", \"National Football Conference\"] and counter !\u003d 235:\n                counter \u003d counter -1\n            else:\n                if counter%7 !\u003d 1:\n                    team.append(val)\n                    \n        if (counter-10)%7 \u003d\u003d 0 and team !\u003d []:\n            team_all.append(team)\n            team \u003d []\n        counter \u003d counter + 1\n        \nteams_rdd \u003d sc.parallelize(team_all)\nteams_schema \u003d teams_rdd.map(lambda x: Row(team\u003dx[0],location\u003dx[1],stadium\u003dx[3]))\nteams_table \u003d sqlContext.createDataFrame(teams_schema)\nteams_table.registerTempTable(\"teams_meta\")\n\n#for team in team_all:\n#   print team\n",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1446760026274_1475575429",
+      "id": "20151105-134706_1653645681",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": ""
+      },
+      "dateCreated": "Nov 5, 2015 1:47:06 PM",
+      "dateStarted": "Nov 7, 2015 11:48:00 AM",
+      "dateFinished": "Nov 7, 2015 11:48:04 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql\nselect * from teams_meta\n",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "location",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "stadium",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "location",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "stadium",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1446760594190_-29762604",
+      "id": "20151105-135634_1682993199",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "location\tstadium\tteam\nOrchard Park, NY\t71,857\tBuffalo Bills\nMiami Gardens, FL\t65,326\tMiami Dolphins\nFoxborough, MA\t68,756\tNew England Patriots\nEast Rutherford, NJ\t82,566\tNew York Jets\nBaltimore, MD\t71,008\tBaltimore Ravens\nCincinnati, OH\t65,535\tCincinnati Bengals\nCleveland, OH\t67,407\tCleveland Browns\nPittsburgh, PA\t65,500\tPittsburgh Steelers\nHouston, TX\t71,054\tHouston Texans\nIndianapolis, IN\t62,421\tIndianapolis Colts\nJacksonville, FL\t67,246\tJacksonville Jaguars\nNashville, TN\t69,143\tTennessee Titans\nDenver, CO\t76,125\tDenver Broncos\nKansas City, MO\t76,416\tKansas City Chiefs\nOakland, CA\t56,057\tOakland Raiders\nSan Diego, CA\t70,561\tSan Diego Chargers\nArlington, TX\t85,000\tDallas Cowboys\nEast Rutherford, NJ\t82,566\tNew York Giants\nPhiladelphia, PA\t69,176\tPhiladelphia Eagles\nLandover, MD\t79,000\tWashington Redskins\nChicago, IL\t61,500\tChicago Bears\nDetroit, MI\t65,000\tDetroit Lions\nGreen Bay, WI\t80,735\tGreen Bay Packers\nMinneapolis, MN\t52,525\tMinnesota Vikings\nAtlanta, GA\t74,228\tAtlanta Falcons\nCharlotte, NC\t74,455\tCarolina Panthers\nNew Orleans, LA\t73,208\tNew Orleans Saints\nTampa, FL\t65,890\tTampa Bay Buccaneers\nGlendale, AZ\t63,400\tArizona Cardinals\nSt. Louis, MO\t66,000\tSt. Louis Rams\nSanta Clara, CA\t68,500\tSan Francisco 49ers\nSeattle, WA\t67,000\tSeattle Seahawks\n"
+      },
+      "dateCreated": "Nov 5, 2015 1:56:34 PM",
+      "dateStarted": "Nov 7, 2015 11:48:00 AM",
+      "dateFinished": "Nov 7, 2015 11:48:04 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\n\nclean_scores \u003d sqlContext.sql( \"\"\"select \n    location as Game_location,\n    winning_team,\n    losing_team,\n    year,\n    Day\nfrom scores_raw sr\nINNER JOIN teams_meta tm on\n    sr.location_ind \u003d tm.team\nwhere \n    (winning_team \u003d \u0027Miami Dolphins\u0027 or losing_team \u003d \u0027Miami Dolphins\u0027)\n    and year \u003e 2010\n    \n    \"\"\")\n\nclean_scores.registerTempTable(\"clean_scores\")\n\n\nprint clean_scores.take(10)\n",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "Game_location",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "winning_team",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "Game_location",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "winning_team",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1446762723489_-146291735",
+      "id": "20151105-143203_1239565792",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "[Row(Game_location\u003du\u0027Jacksonville, FL\u0027, winning_team\u003du\u0027Miami Dolphins\u0027, losing_team\u003du\u0027Jacksonville Jaguars\u0027, year\u003du\u00272014\u0027, Day\u003du\u0027October 26\u0027), Row(Game_location\u003du\u0027Jacksonville, FL\u0027, winning_team\u003du\u0027Jacksonville Jaguars\u0027, losing_team\u003du\u0027Miami Dolphins\u0027, year\u003du\u00272015\u0027, Day\u003du\u0027September 20\u0027), Row(Game_location\u003du\u0027Chicago, IL\u0027, winning_team\u003du\u0027Miami Dolphins\u0027, losing_team\u003du\u0027Chicago Bears\u0027, year\u003du\u00272014\u0027, Day\u003du\u0027October 19\u0027), Row(Game_location\u003du\u0027Houston, TX\u0027, winning_team\u003du\u0027Houston Texans\u0027, losing_team\u003du\u0027Miami Dolphins\u0027, year\u003du\u00272012\u0027, Day\u003du\u0027September 9\u0027), Row(Game_location\u003du\u0027Indianapolis, IN\u0027, winning_team\u003du\u0027Indianapolis Colts\u0027, losing_team\u003du\u0027Miami Dolphins\u0027, year\u003du\u00272012\u0027, Day\u003du\u0027November 4\u0027), Row(Game_location\u003du\u0027Indianapolis, IN\u0027, winning_team\u003du\u0027Miami Dolphins\u0027, losing_team\u003du\u0027Indianapolis Colts\u0027, year\u003du\u00272013\u0027, Day\u003du\u0027September 15\u0027), Row(Game_location\u003du\u0027East Rutherford, NJ\u0027, winning_team\u003du\u0027New York Giants\u0027, losing_team\u003du\u0027Miami Dolphins\u0027, year\u003du\u00272011\u0027, Day\u003du\u0027October 30\u0027), Row(Game_location\u003du\u0027Glendale, AZ\u0027, winning_team\u003du\u0027Arizona Cardinals\u0027, losing_team\u003du\u0027Miami Dolphins\u0027, year\u003du\u00272012\u0027, Day\u003du\u0027September 30\u0027), Row(Game_location\u003du\u0027Landover, MD\u0027, winning_team\u003du\u0027Miami Dolphins\u0027, losing_team\u003du\u0027Washington Redskins\u0027, year\u003du\u00272015\u0027, Day\u003du\u0027September 13\u0027), Row(Game_location\u003du\u0027Cleveland, OH\u0027, winning_team\u003du\u0027Cleveland Browns\u0027, losing_team\u003du\u0027Miami Dolphins\u0027, year\u003du\u00272011\u0027, Day\u003du\u0027September 25\u0027)]\n"
+      },
+      "dateCreated": "Nov 5, 2015 2:32:03 PM",
+      "dateStarted": "Nov 7, 2015 12:09:25 PM",
+      "dateFinished": "Nov 7, 2015 12:09:26 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\nimport datetime\n\nuri \u003d \"http://api.wunderground.com/api/684c0af071abfa0f/history_20150101/q/CA/San_Francisco.json\"\n\ndef lead_zero(value):\n    if int(value) in range(1,10):\n        return str(0) + str(value)\n    else:\n        return value\n        \ndef weather_uri(location, year, day):\n    base_uri \u003d \"http://api.wunderground.com/api/684c0af071abfa0f/history_\"\n    ds \u003d day + \" \" + year\n    x \u003d datetime.datetime.strptime(ds, \"%B %d %Y\").date()\n    date_formated \u003d \"\".join([str(x.year), lead_zero(str(x.month)), lead_zero(str(x.day))])\n\n    location_l \u003d location.split(\",\")\n    state \u003d location_l[1].replace(\" \", \"\")\n    city \u003d location_l[0].replace(\" \", \"_\")\n\n    val \u003d base_uri + date_formated + \"/q/\" + state + \"/\" + city + \".json\"\n    return val\n\nprint clean_scores.map(lambda x: weather_uri(x[0], x[3], x[4])).take(5)\n\n\nsqlContext.registerFunction(\"weather_uri\", weather_uri)\n\n",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "Game_location",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "winning_team",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "Game_location",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "winning_team",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1446827030652_-578610526",
+      "id": "20151106-082350_509100528",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "[u\u0027http://api.wunderground.com/api/684c0af071abfa0f/history_20141026/q/FL/Jacksonville.json\u0027, u\u0027http://api.wunderground.com/api/684c0af071abfa0f/history_20150920/q/FL/Jacksonville.json\u0027, u\u0027http://api.wunderground.com/api/684c0af071abfa0f/history_20141019/q/IL/Chicago.json\u0027, u\u0027http://api.wunderground.com/api/684c0af071abfa0f/history_20120909/q/TX/Houston.json\u0027, u\u0027http://api.wunderground.com/api/684c0af071abfa0f/history_20121104/q/IN/Indianapolis.json\u0027]\n"
+      },
+      "dateCreated": "Nov 6, 2015 8:23:50 AM",
+      "dateStarted": "Nov 7, 2015 12:09:28 PM",
+      "dateFinished": "Nov 7, 2015 12:09:29 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\n\nclean_scores_weather \u003d sqlContext.sql( \"\"\"select distinct year, Day, Game_location, \n                                    weather_uri(Game_location, year, Day) as weather_uri\n                                    from clean_scores\n                            \"\"\")\n\nclean_scores_weather.registerTempTable(\"clean_scores_weather\")\n",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "Game_location",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "winning_team",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "Game_location",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "winning_team",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1446829301262_-1360154323",
+      "id": "20151106-090141_2123346817",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": ""
+      },
+      "dateCreated": "Nov 6, 2015 9:01:41 AM",
+      "dateStarted": "Nov 7, 2015 12:09:33 PM",
+      "dateFinished": "Nov 7, 2015 12:09:33 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql\n\nselect *  from clean_scores_weather",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "year",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "Day",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "year",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "Day",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1446829382899_1312003933",
+      "id": "20151106-090302_477175016",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "year\tDay\tGame_location\tweather_uri\n2012\tDecember 30\tFoxborough, MA\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20121230/q/MA/Foxborough.json\n2015\tOctober 25\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20151025/q/FL/Miami_Gardens.json\n2014\tDecember 7\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20141207/q/FL/Miami_Gardens.json\n2014\tDecember 21\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20141221/q/FL/Miami_Gardens.json\n2013\tOctober 6\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20131006/q/FL/Miami_Gardens.json\n2015\tSeptember 13\tLandover, MD\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20150913/q/MD/Landover.json\n2011\tOctober 30\tEast Rutherford, NJ\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20111030/q/NJ/East_Rutherford.json\n2014\tNovember 9\tDetroit, MI\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20141109/q/MI/Detroit.json\n2014\tSeptember 14\tOrchard Park, NY\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20140914/q/NY/Orchard_Park.json\n2013\tSeptember 22\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20130922/q/FL/Miami_Gardens.json\n2014\tOctober 26\tJacksonville, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20141026/q/FL/Jacksonville.json\n2012\tNovember 4\tIndianapolis, IN\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20121104/q/IN/Indianapolis.json\n2011\tDecember 24\tFoxborough, MA\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20111224/q/MA/Foxborough.json\n2011\tOctober 17\tEast Rutherford, NJ\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20111017/q/NJ/East_Rutherford.json\n2014\tOctober 12\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20141012/q/FL/Miami_Gardens.json\n2015\tSeptember 27\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20150927/q/FL/Miami_Gardens.json\n2014\tNovember 13\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20141113/q/FL/Miami_Gardens.json\n2014\tSeptember 21\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20140921/q/FL/Miami_Gardens.json\n2013\tDecember 29\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20131229/q/FL/Miami_Gardens.json\n2013\tOctober 31\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20131031/q/FL/Miami_Gardens.json\n2012\tDecember 23\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20121223/q/FL/Miami_Gardens.json\n2013\tNovember 24\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20131124/q/FL/Miami_Gardens.json\n2011\tNovember 20\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20111120/q/FL/Miami_Gardens.json\n2012\tDecember 9\tSanta Clara, CA\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20121209/q/CA/Santa_Clara.json\n2011\tDecember 18\tOrchard Park, NY\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20111218/q/NY/Orchard_Park.json\n2012\tNovember 15\tOrchard Park, NY\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20121115/q/NY/Orchard_Park.json\n2014\tSeptember 7\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20140907/q/FL/Miami_Gardens.json\n2011\tSeptember 12\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20110912/q/FL/Miami_Gardens.json\n2014\tDecember 28\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20141228/q/FL/Miami_Gardens.json\n2012\tOctober 14\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20121014/q/FL/Miami_Gardens.json\n2011\tNovember 6\tKansas City, MO\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20111106/q/MO/Kansas_City.json\n2011\tNovember 13\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20111113/q/FL/Miami_Gardens.json\n2014\tDecember 14\tFoxborough, MA\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20141214/q/MA/Foxborough.json\n2012\tSeptember 23\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20120923/q/FL/Miami_Gardens.json\n2012\tOctober 28\tEast Rutherford, NJ\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20121028/q/NJ/East_Rutherford.json\n2013\tDecember 15\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20131215/q/FL/Miami_Gardens.json\n2011\tDecember 11\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20111211/q/FL/Miami_Gardens.json\n2014\tNovember 23\tDenver, CO\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20141123/q/CO/Denver.json\n2012\tSeptember 9\tHouston, TX\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20120909/q/TX/Houston.json\n2011\tSeptember 18\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20110918/q/FL/Miami_Gardens.json\n2012\tSeptember 16\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20120916/q/FL/Miami_Gardens.json\n2011\tOctober 2\tSan Diego, CA\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20111002/q/CA/San_Diego.json\n2011\tNovember 24\tArlington, TX\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20111124/q/TX/Arlington.json\n2011\tSeptember 25\tCleveland, OH\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20110925/q/OH/Cleveland.json\n2012\tNovember 25\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20121125/q/FL/Miami_Gardens.json\n2013\tNovember 11\tTampa, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20131111/q/FL/Tampa.json\n2014\tSeptember 28\tOakland, CA\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20140928/q/CA/Oakland.json\n2013\tDecember 8\tPittsburgh, PA\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20131208/q/PA/Pittsburgh.json\n2014\tDecember 1\tEast Rutherford, NJ\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20141201/q/NJ/East_Rutherford.json\n2014\tOctober 19\tChicago, IL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20141019/q/IL/Chicago.json\n2015\tOctober 29\tFoxborough, MA\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20151029/q/MA/Foxborough.json\n2011\tOctober 23\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20111023/q/FL/Miami_Gardens.json\n2015\tOctober 18\tNashville, TN\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20151018/q/TN/Nashville.json\n2013\tDecember 1\tEast Rutherford, NJ\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20131201/q/NJ/East_Rutherford.json\n2015\tSeptember 20\tJacksonville, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20150920/q/FL/Jacksonville.json\n2015\tOctober 4\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20151004/q/FL/Miami_Gardens.json\n2013\tSeptember 30\tNew Orleans, LA\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20130930/q/LA/New_Orleans.json\n2013\tSeptember 15\tIndianapolis, IN\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20130915/q/IN/Indianapolis.json\n2013\tSeptember 8\tCleveland, OH\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20130908/q/OH/Cleveland.json\n2013\tOctober 27\tFoxborough, MA\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20131027/q/MA/Foxborough.json\n2013\tDecember 22\tOrchard Park, NY\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20131222/q/NY/Orchard_Park.json\n2012\tSeptember 30\tGlendale, AZ\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20120930/q/AZ/Glendale.json\n2011\tDecember 4\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20111204/q/FL/Miami_Gardens.json\n2013\tOctober 20\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20131020/q/FL/Miami_Gardens.json\n2012\tDecember 2\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20121202/q/FL/Miami_Gardens.json\n2012\tDecember 16\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20121216/q/FL/Miami_Gardens.json\n2011\tJanuary 1\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20110101/q/FL/Miami_Gardens.json\n2012\tOctober 7\tCincinnati, OH\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20121007/q/OH/Cincinnati.json\n2013\tNovember 17\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20131117/q/FL/Miami_Gardens.json\n2012\tNovember 11\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20121111/q/FL/Miami_Gardens.json\n2014\tNovember 2\tMiami Gardens, FL\thttp://api.wunderground.com/api/684c0af071abfa0f/history_20141102/q/FL/Miami_Gardens.json\n"
+      },
+      "dateCreated": "Nov 6, 2015 9:03:02 AM",
+      "dateStarted": "Nov 7, 2015 12:09:34 PM",
+      "dateFinished": "Nov 7, 2015 12:09:36 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\nimport json\nimport requests\n\ndef get_weather_data(uri, year, day, location):\n\n    if uri \u003d\u003d \"http://api.wunderground.com/api/684c0af071abfa0f/history_20141016/q/MA/Foxborough.json\":\n        uri \u003d uri.replace(\"Foxboroug\", \"Foxboro\")\n\n    r \u003d requests.get(uri)\n    wjs \u003d json.loads(r.text)\n\n    if \u0027history\u0027 in wjs:\n        if \u0027dailysummary\u0027 in wjs[\u0027history\u0027]:\n            for d in wjs[\u0027history\u0027][\u0027dailysummary\u0027]:\n                maxtempi \u003d d[\u0027maxtempi\u0027]\n                mintempi \u003d d[\u0027mintempi\u0027]\n                meantempi \u003d d[\u0027meantempi\u0027]\n                humidity \u003d d[\u0027humidity\u0027]\n                maxwspdi \u003d d[\u0027maxwspdi\u0027]\n                rain \u003d d[\u0027rain\u0027]\n                snow \u003d d[\u0027snow\u0027]\n                hail \u003d d[\u0027hail\u0027]\n                fog \u003d d[\u0027fog\u0027]\n                val \u003d [year, day, maxtempi, mintempi, meantempi, humidity, maxwspdi, rain, snow, hail, fog, location]\n                \n                for index, v in enumerate(val):\n                    if index not in [0,1,11]:\n                        if RepresentsInt(v):\n                            val[index] \u003d int(v)\n                        else:\n                            val[index] \u003d 0\n                return val\n        else:\n            return  [year,day,None,None,None,None,None,None,None,None,None,location] \n    else:\n        return  [year,day,None,None,None,None,None,None,None,None,None,location]\n\n\n\t    \nweather_rdd \u003d clean_scores_weather.map(lambda x: get_weather_data(x[3], x[0], x[1], x[2]))\nweather_schema \u003d weather_rdd.map(lambda x: Row(year\u003dx[0],day\u003dx[1],maxtempi\u003dx[2],mintempi\u003dx[3], meantempi\u003dx[4], humidity\u003dx[5], maxwspdi\u003dx[6], rain\u003dx[7], snow\u003dx[8], hail\u003dx[9], fog\u003dx[10],location\u003dx[11]))\n\nweather_table \u003d sqlContext.createDataFrame(weather_schema)\nweather_table.registerTempTable(\"weather\")",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1446835768959_1579431410",
+      "id": "20151106-104928_1687817750",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": ""
+      },
+      "dateCreated": "Nov 6, 2015 10:49:28 AM",
+      "dateStarted": "Nov 7, 2015 12:09:41 PM",
+      "dateFinished": "Nov 7, 2015 12:09:51 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\nprint weather_table.take(5)\n\n",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorHide": false,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1446841340617_1052675107",
+      "id": "20151106-122220_1722469329",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "[Row(day\u003du\u0027December 30\u0027, fog\u003dNone, hail\u003dNone, humidity\u003dNone, location\u003du\u0027Foxborough, MA\u0027, maxtempi\u003dNone, maxwspdi\u003dNone, meantempi\u003dNone, mintempi\u003dNone, rain\u003dNone, snow\u003dNone, year\u003du\u00272012\u0027), Row(day\u003du\u0027October 25\u0027, fog\u003d0, hail\u003d0, humidity\u003d0, location\u003du\u0027Miami Gardens, FL\u0027, maxtempi\u003d84, maxwspdi\u003d18, meantempi\u003d78, mintempi\u003d73, rain\u003d0, snow\u003d0, year\u003du\u00272015\u0027), Row(day\u003du\u0027December 7\u0027, fog\u003d0, hail\u003d0, humidity\u003d0, location\u003du\u0027Miami Gardens, FL\u0027, maxtempi\u003d80, maxwspdi\u003d16, meantempi\u003d72, mintempi\u003d63, rain\u003d0, snow\u003d0, year\u003du\u00272014\u0027), Row(day\u003du\u0027December 21\u0027, fog\u003d0, hail\u003d0, humidity\u003d0, location\u003du\u0027Miami Gardens, FL\u0027, maxtempi\u003d79, maxwspdi\u003d12, meantempi\u003d70, mintempi\u003d61, rain\u003d0, snow\u003d0, year\u003du\u00272014\u0027), Row(day\u003du\u0027October 6\u0027, fog\u003d0, hail\u003d0, humidity\u003d0, location\u003du\u0027Miami Gardens, FL\u0027, maxtempi\u003d89, maxwspdi\u003d10, meantempi\u003d82, mintempi\u003d75, rain\u003d0, snow\u003d0, year\u003du\u00272013\u0027)]\n"
+      },
+      "dateCreated": "Nov 6, 2015 12:22:20 PM",
+      "dateStarted": "Nov 7, 2015 12:09:54 PM",
+      "dateFinished": "Nov 7, 2015 12:09:56 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql\n\nselect * from\n(\nselect\nwinning_team as team,\n1 as won,\nfog,\nhail,\nmaxtempi,\nmeantempi,\nmintempi,\nrain,\nsnow\nfrom weather w\n    inner join clean_scores sc on\n        w.day \u003d sc.Day\n        and w.year \u003d sc.year\n        and w.location \u003d sc.Game_location\nwhere maxtempi is not null\nUNION ALL\nselect\nlosing_team as team,\n0 as won,\nfog,\nhail,\nmaxtempi,\nmeantempi,\nmintempi,\nrain,\nsnow\nfrom weather w\n    inner join clean_scores sc on\n        w.day \u003d sc.Day\n        and w.year \u003d sc.year\n        and w.location \u003d sc.Game_location\nwhere maxtempi is not null\n) t\nwhere team \u003d \u0027Miami Dolphins\u0027\n\n\n",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "winning_team",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "won",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "winning_team",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "won",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1446843815940_1559681092",
+      "id": "20151106-130335_877984778",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "team\twon\tfog\thail\tmaxtempi\tmeantempi\tmintempi\train\tsnow\nMiami Dolphins\t1\t0\t0\t84\t78\t73\t0\t0\nMiami Dolphins\t1\t0\t0\t86\t80\t75\t1\t0\nMiami Dolphins\t1\t0\t0\t91\t83\t77\t1\t0\nMiami Dolphins\t1\t0\t0\t63\t51\t38\t0\t0\nMiami Dolphins\t1\t0\t0\t66\t60\t51\t0\t0\nMiami Dolphins\t1\t0\t0\t78\t64\t50\t1\t0\nMiami Dolphins\t1\t0\t0\t72\t67\t61\t0\t0\nMiami Dolphins\t1\t0\t0\t80\t72\t64\t1\t0\nMiami Dolphins\t1\t0\t0\t80\t74\t69\t0\t0\nMiami Dolphins\t1\t0\t0\t75\t64\t54\t0\t0\nMiami Dolphins\t1\t0\t0\t82\t68\t55\t0\t0\nMiami Dolphins\t1\t0\t0\t80\t76\t71\t1\t0\nMiami Dolphins\t1\t0\t0\t91\t84\t78\t1\t0\nMiami Dolphins\t1\t0\t0\t87\t81\t75\t1\t0\nMiami Dolphins\t1\t0\t0\t86\t80\t73\t0\t0\nMiami Dolphins\t1\t0\t0\t51\t43\t35\t0\t0\nMiami Dolphins\t1\t1\t0\t30\t24\t19\t1\t1\nMiami Dolphins\t1\t0\t0\t84\t78\t73\t0\t0\nMiami Dolphins\t1\t0\t0\t79\t70\t61\t0\t0\nMiami Dolphins\t1\t0\t0\t77\t70\t64\t0\t0\nMiami Dolphins\t1\t0\t0\t64\t53\t41\t1\t0\nMiami Dolphins\t1\t0\t0\t57\t47\t36\t0\t0\nMiami Dolphins\t1\t0\t0\t34\t26\t17\t0\t1\nMiami Dolphins\t1\t0\t0\t54\t46\t39\t0\t0\nMiami Dolphins\t1\t0\t0\t75\t69\t62\t0\t0\nMiami Dolphins\t1\t0\t0\t82\t74\t66\t0\t0\nMiami Dolphins\t1\t0\t0\t60\t58\t55\t0\t0\nMiami Dolphins\t1\t0\t0\t73\t62\t50\t0\t0\nMiami Dolphins\t1\t0\t0\t81\t77\t73\t1\t0\nMiami Dolphins\t1\t0\t0\t71\t61\t51\t0\t0\nMiami Dolphins\t1\t0\t0\t73\t66\t60\t0\t0\nMiami Dolphins\t1\t0\t0\t84\t78\t72\t0\t0\nMiami Dolphins\t0\t0\t0\t46\t40\t33\t0\t1\nMiami Dolphins\t0\t0\t0\t67\t56\t45\t0\t0\nMiami Dolphins\t0\t0\t0\t48\t39\t29\t0\t0\nMiami Dolphins\t0\t0\t0\t88\t82\t75\t0\t0\nMiami Dolphins\t0\t0\t0\t80\t76\t73\t1\t0\nMiami Dolphins\t0\t0\t0\t42\t37\t31\t1\t0\nMiami Dolphins\t0\t0\t0\t91\t78\t64\t0\t0\nMiami Dolphins\t0\t0\t0\t93\t84\t75\t0\t0\nMiami Dolphins\t0\t0\t0\t89\t80\t73\t1\t0\nMiami Dolphins\t0\t0\t0\t91\t83\t75\t1\t0\nMiami Dolphins\t0\t0\t0\t80\t72\t63\t0\t0\nMiami Dolphins\t0\t0\t0\t82\t73\t64\t0\t0\nMiami Dolphins\t0\t0\t0\t88\t84\t79\t1\t0\nMiami Dolphins\t0\t0\t0\t91\t84\t78\t1\t0\nMiami Dolphins\t0\t0\t0\t68\t62\t55\t1\t0\nMiami Dolphins\t0\t0\t0\t84\t75\t66\t0\t0\nMiami Dolphins\t0\t0\t0\t82\t75\t68\t1\t0\nMiami Dolphins\t0\t0\t0\t88\t82\t77\t0\t0\nMiami Dolphins\t0\t0\t0\t90\t80\t71\t0\t0\nMiami Dolphins\t0\t0\t0\t82\t72\t62\t0\t0\nMiami Dolphins\t0\t0\t0\t84\t78\t75\t1\t0\nMiami Dolphins\t0\t0\t0\t62\t53\t43\t0\t0\nMiami Dolphins\t0\t0\t0\t81\t76\t70\t1\t0\nMiami Dolphins\t0\t0\t0\t85\t80\t74\t0\t0\nMiami Dolphins\t0\t0\t0\t78\t74\t71\t1\t0\nMiami Dolphins\t0\t1\t0\t44\t36\t27\t1\t1\nMiami Dolphins\t0\t0\t0\t45\t40\t36\t0\t0\nMiami Dolphins\t0\t0\t0\t79\t68\t59\t0\t0\nMiami Dolphins\t0\t0\t0\t79\t74\t69\t1\t0\nMiami Dolphins\t0\t0\t0\t60\t51\t42\t0\t0\nMiami Dolphins\t0\t0\t0\t45\t38\t30\t0\t0\nMiami Dolphins\t0\t0\t0\t102\t90\t77\t0\t0\nMiami Dolphins\t0\t0\t0\t89\t82\t75\t0\t0\nMiami Dolphins\t0\t0\t0\t79\t72\t64\t0\t0\n"
+      },
+      "dateCreated": "Nov 6, 2015 1:03:35 PM",
+      "dateStarted": "Nov 7, 2015 12:11:20 PM",
+      "dateFinished": "Nov 7, 2015 12:11:29 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\n\nprepped_rdd \u003d sqlContext.sql( \"\"\"select * from\n(\nselect\nwinning_team as team,\n1 as won,\nfog,\nhail,\nmaxtempi,\nmeantempi,\nmintempi,\nrain,\nsnow\nfrom weather w\n    inner join clean_scores sc on\n        w.day \u003d sc.Day\n        and w.year \u003d sc.year\n        and w.location \u003d sc.Game_location\nwhere maxtempi is not null\nUNION ALL\nselect\nlosing_team as team,\n0 as won,\nfog,\nhail,\nmaxtempi,\nmeantempi,\nmintempi,\nrain,\nsnow\nfrom weather w\n    inner join clean_scores sc on\n        w.day \u003d sc.Day\n        and w.year \u003d sc.year\n        and w.location \u003d sc.Game_location\nwhere maxtempi is not null\n) t\nwhere team \u003d \u0027Miami Dolphins\u0027\n\n        \"\"\")\n\nprepped_rdd.registerTempTable(\"prepped\")\n\n        \n",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "winning_team",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "won",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "winning_team",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "won",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1446836031162_-420140917",
+      "id": "20151106-105351_1422970761",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": ""
+      },
+      "dateCreated": "Nov 6, 2015 10:53:51 AM",
+      "dateStarted": "Nov 7, 2015 12:11:46 PM",
+      "dateFinished": "Nov 7, 2015 12:11:46 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql\n\n#select * from prepped\n\nselect count(*) from prepped",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": true,
+          "keys": [
+            {
+              "name": "team",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "won",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [
+            {
+              "name": "meantempi",
+              "index": 5.0,
+              "aggr": "sum"
+            }
+          ],
+          "scatter": {
+            "yAxis": {
+              "name": "meantempi",
+              "index": 5.0,
+              "aggr": "sum"
+            }
+          }
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1446837470474_-134374820",
+      "id": "20151106-111750_1687127637",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "c0\n66\n"
+      },
+      "dateCreated": "Nov 6, 2015 11:17:50 AM",
+      "dateStarted": "Nov 7, 2015 12:16:25 PM",
+      "dateFinished": "Nov 7, 2015 12:16:38 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\nfrom pyspark.mllib.classification import SVMWithSGD, SVMModel\nfrom pyspark.mllib.regression import LabeledPoint\n\ndef parsePoint(line):\n\n    values \u003d [float(x) for x in line[1:]]\n    return LabeledPoint(values[0], values[1:])\n    \nparsedData \u003d prepped_rdd.map(parsePoint)\n\nprint parsedData.take(5)\n\n# Build the model\nmodel \u003d SVMWithSGD.train(parsedData, iterations\u003d200)\n\n# Evaluating the model on training data\nlabelsAndPreds \u003d parsedData.map(lambda p: (p.label, model.predict(p.features)))\ntrainErr \u003d labelsAndPreds.filter(lambda (v, p): v !\u003d p).count() / float(parsedData.count())\nprint(\"Training Error \u003d \" + str(trainErr))\n\n",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1446838313711_1361493845",
+      "id": "20151106-113153_1391760679",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "[LabeledPoint(1.0, [0.0,0.0,84.0,78.0,73.0,0.0,0.0]), LabeledPoint(1.0, [0.0,0.0,86.0,80.0,75.0,1.0,0.0]), LabeledPoint(1.0, [0.0,0.0,91.0,83.0,77.0,1.0,0.0]), LabeledPoint(1.0, [0.0,0.0,63.0,51.0,38.0,0.0,0.0]), LabeledPoint(1.0, [0.0,0.0,66.0,60.0,51.0,0.0,0.0])]\nTraining Error \u003d 0.515151515152\n"
+      },
+      "dateCreated": "Nov 6, 2015 11:31:53 AM",
+      "dateStarted": "Nov 7, 2015 12:12:04 PM",
+      "dateFinished": "Nov 7, 2015 12:13:20 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\nfrom pyspark.mllib.regression import LabeledPoint\nfrom pyspark.mllib.tree import DecisionTree, DecisionTreeModel\nfrom pyspark.mllib.util import MLUtils\n\n\n# Split the data into training and test sets (50% held out for testing)\n(trainingData, testData) \u003d parsedData.randomSplit([0.5, 0.5])\n\n# Train a DecisionTree model.\n#  Empty categoricalFeaturesInfo indicates all features are continuous.\nmodel \u003d DecisionTree.trainClassifier(trainingData, numClasses\u003d2, categoricalFeaturesInfo\u003d{}, impurity\u003d\u0027gini\u0027, maxDepth\u003d5, maxBins\u003d32)\n\n# Evaluate model on test instances and compute test error\npredictions \u003d model.predict(testData.map(lambda x: x.features))\nlabelsAndPredictions \u003d testData.map(lambda lp: lp.label).zip(predictions)\ntestErr \u003d labelsAndPredictions.filter(lambda (v, p): v !\u003d p).count() / float(testData.count())\nprint(\u0027Test Error \u003d \u0027 + str(testErr))\nprint(\u0027Learned classification tree model:\u0027)\nprint(model.toDebugString())",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1446844128667_1273860800",
+      "id": "20151106-130848_754022907",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "Test Error \u003d 0.290322580645\nLearned classification tree model:\nDecisionTreeModel classifier of depth 5 with 11 nodes\n  If (feature 2 \u003c\u003d 34.0)\n   Predict: 1.0\n  Else (feature 2 \u003e 34.0)\n   If (feature 2 \u003c\u003d 48.0)\n    Predict: 0.0\n   Else (feature 2 \u003e 48.0)\n    If (feature 4 \u003c\u003d 41.0)\n     Predict: 1.0\n    Else (feature 4 \u003e 41.0)\n     If (feature 3 \u003c\u003d 56.0)\n      Predict: 0.0\n     Else (feature 3 \u003e 56.0)\n      If (feature 2 \u003c\u003d 75.0)\n       Predict: 1.0\n      Else (feature 2 \u003e 75.0)\n       Predict: 0.0\n\n"
+      },
+      "dateCreated": "Nov 6, 2015 1:08:48 PM",
+      "dateStarted": "Nov 7, 2015 12:14:18 PM",
+      "dateFinished": "Nov 7, 2015 12:14:30 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1446926583020_1437971568",
+      "id": "20151107-120303_781429434",
+      "dateCreated": "Nov 7, 2015 12:03:03 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "NFL Weather",
+  "id": "2AW7GZ7JP",
+  "angularObjects": {
+    "2AUT5SWNG": [],
+    "2ATJEEV3Z": [],
+    "2ATX2UP3E": [],
+    "2AV9JBN8B": [],
+    "2AVK6ZW5M": [],
+    "2AW72AXBP": [],
+    "2ATDB6DPP": [],
+    "2AUV8UA7U": [],
+    "2AUH78YGG": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

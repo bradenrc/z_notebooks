@@ -1,0 +1,127 @@
+{
+  "paragraphs": [
+    {
+      "text": "%pyspark\n\nimport matplotlib.pyplot as plt\nfrom wordcloud import WordCloud\n\ntext \u003d open(\"/temp/playerNews.csv\").read()\nwordcloud \u003d WordCloud().generate(text)\n\nplt.imshow(wordcloud)\nplt.axis(\"off\")\n",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1438032742083_-1274152094",
+      "id": "20150727-143222_1303721226",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": ""
+      },
+      "dateCreated": "Jul 27, 2015 2:32:22 PM",
+      "dateStarted": "Aug 6, 2015 8:44:17 AM",
+      "dateFinished": "Aug 6, 2015 8:44:28 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\n\nimport os, sys, csv, StringIO, numbers\n\ntweet \u003d sqlContext.read.json(\"/temp/twitter_data/\")\ntweet.registerTempTable(\"tweet\")\n\ndef match_players(text, player):\n    if text.__contains__(player):\n        return player\n    else:\n        return \"\"\n\nsqlContext.registerFunction(\"matchplayers\", match_players)\n\nstopwords \u003d open(\"/temp/stopwords.txt\", \"r\")\nstopwords_list \u003d []\nfor word in stopwords: stopwords_list.append(word.replace(\"\\n\", \"\"))\n\n\ndef match_players(text, player):\n    if text.__contains__(player):\n        return player\n    else:\n        return \"\"\nsqlContext.registerFunction(\"matchplayers\", match_players)\n\ndef split_into_words(x):\n    #remove stop words\n    xl \u003d x.text.lower().split(\" \")\n    cleaned \u003d set(xl) - set(stopwords_list)\n    return cleaned\n\n\ndef create_report(data):\n    template \u003d open(\"/temp/words_template.html\", \"r\").read()\n    new \u003d template.replace(\"##data##\", data)\n    return new\n\n\nplayer \u003d \u0027Tom Brady\u0027\nquery \u003d \"select text from tweet where matchplayers(text, \\\u0027{}\\\u0027) \u003c\u003e \\\u0027\\\u0027\".format(player)\ntwtext \u003d sqlContext.sql(query)\n\nwords \u003d twtext.flatMap(split_into_words)\nresult \u003d words.map(lambda x: (x, 1)).reduceByKey(lambda x, y: x + y)\n\n\nif result.count() \u003e 0:\n    l \u003d [[\u0027Location\u0027, \u0027Parent\u0027, \u0027Count\u0027, \u0027Count\u0027]]\n    l.append([\u0027Keyword\u0027, \u0027\u0027, 0, 0])\n\n    for w in result.collect():\n        if not str(player).lower().__contains__(w[0].lower()):\n            l.append([w[0].encode(\u0027utf-8\u0027), \u0027Keyword\u0027, w[1], w[1]])\n\n    report \u003d create_report(str(l))\n    ",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1438445765626_1903212548",
+      "id": "20150801-091605_1378717230",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": ""
+      },
+      "dateCreated": "Aug 1, 2015 9:16:05 AM",
+      "dateStarted": "Aug 6, 2015 8:54:01 AM",
+      "dateFinished": "Aug 6, 2015 8:55:37 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\n\nr \u003d create_report(str(l))\nprint \"%angular  \" + r\n\n",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1438712020025_541510127",
+      "id": "20150804-111340_76966334",
+      "result": {
+        "code": "SUCCESS",
+        "type": "ANGULAR",
+        "msg": "     \u003cscript type\u003d\"text/javascript\" src\u003d\"https://www.google.com/jsapi?autoload\u003d{\u0027modules\u0027:[{\u0027name\u0027:\u0027visualization\u0027,\u0027version\u0027:\u00271.1\u0027,\u0027packages\u0027:[\u0027treemap\u0027]}]}\"\u003e\u003c/script\u003e\n    \u003cscript type\u003d\"text/javascript\"\u003e\n\n        google.setOnLoadCallback(drawChart);\n      function drawChart() {\n        var data \u003d google.visualization.arrayToDataTable(\n        [[\u0027Location\u0027, \u0027Parent\u0027, \u0027Count\u0027, \u0027Count\u0027], [\u0027Keyword\u0027, \u0027\u0027, 0, 0], [\u002716:\\n\\n1)\u0027, \u0027Keyword\u0027, 2, 2], [\u0027@espnnfl:\u0027, \u0027Keyword\u0027, 1, 1], [\u0027post-deflategate,\u0027, \u0027Keyword\u0027, 1, 1], [\u0027nflpa\u0027, \u0027Keyword\u0027, 10, 10], [\u0027[bleacher\u0027, \u0027Keyword\u0027, 2, 2], [\u0027tops\u0027, \u0027Keyword\u0027, 3, 3], [\u0027advantage\u0027, \u0027Keyword\u0027, 1, 1], [\u0027players\u0027, \u0027Keyword\u0027, 2, 2], [\u0027#deflategat\\xe2\\x80\\xa6\u0027, \u0027Keyword\u0027, 1, 1], [\u0027judge\u0027, \u0027Keyword\u0027, 1, 1], [\u0027player\u0027, \u0027Keyword\u0027, 3, 3], [\u0027arrested\u0027, \u0027Keyword\u0027, 20, 20], [\u0027#aaronrodgers\u0027, \u0027Keyword\u0027, 1, 1], [\u0027offered\u0027, \u0027Keyword\u0027, 5, 5], [\u0027time\u0027, \u0027Keyword\u0027, 1, 1], [\u0027http://t.co/5nwasxbepd\u0027, \u0027Keyword\u0027, 1, 1], [\u0027plea.\u0027, \u0027Keyword\u0027, 1, 1], [\u0027apparel.\\nhttp://t.co/ubmyvz3\\xe2\\x80\\xa6\u0027, \u0027Keyword\u0027, 3, 3], [\u0027reportedly\u0027, \u0027Keyword\u0027, 2, 2], [\u0027@not_romo:\u0027, \u0027Keyword\u0027, 3, 3], [\u0027poser\u0027, \u0027Keyword\u0027, 1, 1], [\u0027\\xe2\\x80\\xa6\u0027, \u0027Keyword\u0027, 2, 2], [\u0027rumors:\u0027, \u0027Keyword\u0027, 1, 1], [\u002795\\n5)\u0027, \u0027Keyword\u0027, 2, 2], [\u0027jeff\u0027, \u0027Keyword\u0027, 2, 2], [\u002795\\n4)\u0027, \u0027Keyword\u0027, 2, 2], [\u0027gained\u0027, \u0027Keyword\u0027, 1, 1], [\u0027support\u0027, \u0027Keyword\u0027, 2, 2], [\u0027merchandise\u0027, \u0027Keyword\u0027, 24, 24], [\u0027leading\u0027, \u0027Keyword\u0027, 3, 3], [\u0027(via\u0027, \u0027Keyword\u0027, 3, 3], [\u0027opener\u0027, \u0027Keyword\u0027, 1, 1], [\u0027fan\u0027, \u0027Keyword\u0027, 1, 1], [\"nfl\u0027s\", \u0027Keyword\u0027, 2, 2], [\u0027http://t.co/hb710t8flw\u0027, \u0027Keyword\u0027, 2, 2], [\u0027http://t.co/zgpbtd8sxe\u0027, \u0027Keyword\u0027, 1, 1], [\u0027+\u0027, \u0027Keyword\u0027, 1, 1], [\u0027plans\u0027, \u0027Keyword\u0027, 1, 1], [\u0027@nfl\u0027, \u0027Keyword\u0027, 1, 1], [\u0027wearing\u0027, \u0027Keyword\u0027, 1, 1], [\u0027#sports\u0027, \u0027Keyword\u0027, 4, 4], [\u0027http://t.co/fkrpivmr3f\u0027, \u0027Keyword\u0027, 1, 1], [\u0027http://t.co/gbrcpalgi9\u0027, \u0027Keyword\u0027, 1, 1], [\u0027tyler\u0027, \u0027Keyword\u0027, 1, 1], [\u0027take\u0027, \u0027Keyword\u0027, 1, 1], [\u0027@nfloncbs:\u0027, \u0027Keyword\u0027, 1, 1], [\u0027good\u0027, \u0027Keyword\u0027, 1, 1], [\u0027kaepernick\u0027, \u0027Keyword\u0027, 3, 3], [\u0027thing\u0027, \u0027Keyword\u0027, 1, 1], [\u0027karen\\xe2\\x80\\xa6\u0027, \u0027Keyword\u0027, 1, 1], [\u0027@barthubbuch:\u0027, \u0027Keyword\u0027, 4, 4], [\u0027games\\n\\npackers\u0027, \u0027Keyword\u0027, 20, 20], [\u0027rodgers\u0027, \u0027Keyword\u0027, 2, 2], [\u0027http://t.co/sr5fqeoyqs\u0027, \u0027Keyword\u0027, 1, 1], [\u0027http://t.co/wqxpjtellx\u0027, \u0027Keyword\u0027, 1, 1], [\u0027know\u0027, \u0027Keyword\u0027, 1, 1], [\u0027#rogergoodell\u0027, \u0027Keyword\u0027, 1, 1], [\u0027http://t.co/xoai6sfwjg\u0027, \u0027Keyword\u0027, 1, 1], [\u0027dt\u0027, \u0027Keyword\u0027, 20, 20], [\u0027http://t.co/aue1ehkxwj\u0027, \u0027Keyword\u0027, 1, 1], [\u002797\\n3)\u0027, \u0027Keyword\u0027, 2, 2], [\u0027http://t.co/vldxrioqli\u0027, \u0027Keyword\u0027, 4, 4], [\u0027including\u0027, \u0027Keyword\u0027, 3, 3], [\u0027http://t.co/zkgak3tcnr\u0027, \u0027Keyword\u0027, 1, 1], [\u0027@patriotsextra:\u0027, \u0027Keyword\u0027, 15, 15], [\u0027fully\u0027, \u0027Keyword\u0027, 1, 1], [\u0027source\u0027, \u0027Keyword\u0027, 1, 1], [\u0027retail\u0027, \u0027Keyword\u0027, 8, 8], [\u0027offer\u0027, \u0027Keyword\u0027, 4, 4], [\u0027deflategate\u0027, \u0027Keyword\u0027, 1, 1], [\u0027http://t.co/eyp3gnkuhu\u0027, \u0027Keyword\u0027, 2, 2], [\u00274\u0027, \u0027Keyword\u0027, 21, 21], [\u0027top\u0027, \u0027Keyword\u0027, 3, 3], [\u0027slow\u0027, \u0027Keyword\u0027, 2, 2], [\u0027hat\u0027, \u0027Keyword\u0027, 2, 2], [\u0027drew\u0027, \u0027Keyword\u0027, 3, 3], [\u0027\u0026amp;\u0027, \u0027Keyword\u0027, 2, 2], [\u0027suspension\u0027, \u0027Keyword\u0027, 3, 3], [\u0027right\u0027, \u0027Keyword\u0027, 4, 4], [\u0027remember\u0027, \u0027Keyword\u0027, 1, 1], [\u0027outselling\u0027, \u0027Keyword\u0027, 1, 1], [\u0027merchandise;\u0027, \u0027Keyword\u0027, 1, 1], [\"brady\u0027\", \u0027Keyword\u0027, 1, 1], [\u0027brady.\u0027, \u0027Keyword\u0027, 1, 1], [\u0027case\u0027, \u0027Keyword\u0027, 2, 2], [\u0027brady*\u0027, \u0027Keyword\u0027, 1, 1], [\u0027#newenglandpatriots\u0027, \u0027Keyword\u0027, 1, 1], [\u0027*i\u0027, \u0027Keyword\u0027, 1, 1], [\u0027#fantasyfootballproblems\u0027, \u0027Keyword\u0027, 1, 1], [\u0027http://t.co/rzk6jtzkpy\u0027, \u0027Keyword\u0027, 1, 1], [\u0027http://t.co/laxxmr8axb\u0027, \u0027Keyword\u0027, 1, 1], [\u0027http://t.co/hagfemaqxz\u0027, \u0027Keyword\u0027, 1, 1], [\u0027march\u0027, \u0027Keyword\u0027, 1, 1], [\u0027rings\u0027, \u0027Keyword\u0027, 1, 1], [\u0027@onlyinbos:\u0027, \u0027Keyword\u0027, 20, 20], [\u0027behalf\u0027, \u0027Keyword\u0027, 1, 1], [\u0027http://t.co/hzwyxhub00\u0027, \u0027Keyword\u0027, 1, 1], [\u0027#12\u0027, \u0027Keyword\u0027, 1, 1], [\u0027fiscal\u0027, \u0027Keyword\u0027, 2, 2], [\u0027reported\u0027, \u0027Keyword\u0027, 1, 1], [\"nflpa\u0027s\", \u0027Keyword\u0027, 1, 1], [\u0027ever\\nhttp://t.co/ibxlrtuwbi\u0027, \u0027Keyword\u0027, 1, 1], [\u0027http://t.co/shczrainzd\u0027, \u0027Keyword\u0027, 1, 1], [\u0027http://t.co/pjbvozxxva\u0027, \u0027Keyword\u0027, 1, 1], [\u0027#tombrady\u0027, \u0027Keyword\u0027, 1, 1], [\"\u0027deflategate\u0027\", \u0027Keyword\u0027, 2, 2], [\u0027quarterbacks\u0027, \u0027Keyword\u0027, 2, 2], [\u0027@patsgazette:\u0027, \u0027Keyword\u0027, 3, 3], [\u0027women\\xe2\\x80\\x99s\u0027, \u0027Keyword\u0027, 3, 3], [\u0027admissi\\xe2\\x80\\xa6\u0027, \u0027Keyword\u0027, 4, 4], [\u0027suspension,\u0027, \u0027Keyword\u0027, 4, 4], [\u0027rocks\u0027, \u0027Keyword\u0027, 1, 1], [\u0027http://t.co/pg47zloa9v\u0027, \u0027Keyword\u0027, 1, 1], [\u0027games\u0027, \u0027Keyword\u0027, 20, 20], [\u0027brady\u0026amp;#039s\\xc2\\xa0suspension\u0027, \u0027Keyword\u0027, 1, 1], [\u0027|\u0027, \u0027Keyword\u0027, 4, 4], [\u0027size\u0027, \u0027Keyword\u0027, 1, 1], [\u0027leads\u0027, \u0027Keyword\u0027, 19, 19], [\u0027http://t.co/vyyo28jk0g\u0027, \u0027Keyword\u0027, 1, 1], [\u0027report]\u0027, \u0027Keyword\u0027, 2, 2], [\u0027howe\\xe2\\x80\\xa6\u0027, \u0027Keyword\u0027, 1, 1], [\u0027behind\u0027, \u0027Keyword\u0027, 3, 3], [\u0027http://t.co/ybhsnflf3e\u0027, \u0027Keyword\u0027, 20, 20], [\u0027roethlisberger\u0027, \u0027Keyword\u0027, 2, 2], [\u0027ignores\u0027, \u0027Keyword\u0027, 2, 2], [\u0027reports\u0027, \u0027Keyword\u0027, 4, 4], [\u0027fans\u0027, \u0027Keyword\u0027, 1, 1], [\u0027play\u0027, \u0027Keyword\u0027, 1, 1], [\u0027#deals\u0027, \u0027Keyword\u0027, 1, 1], [\"\u0027free\", \u0027Keyword\u0027, 1, 1], [\u0027also\u0027, \u0027Keyword\u0027, 1, 1], [\u0027supporting\u0027, \u0027Keyword\u0027, 1, 1], [\u0027leave\u0027, \u0027Keyword\u0027, 1, 1], [\u0027#sportingnews\u0027, \u0027Keyword\u0027, 1, 1], [\u0027say\u0027, \u0027Keyword\u0027, 1, 1], [\u0027offers\u0027, \u0027Keyword\u0027, 1, 1], [\u0027taking\u0027, \u0027Keyword\u0027, 1, 1], [\u0027regarding\u0027, \u0027Keyword\u0027, 1, 1], [\u002799\\n2)\u0027, \u0027Keyword\u0027, 2, 2], [\u0027#bargains\u0027, \u0027Keyword\u0027, 1, 1], [\u0027slurper.\u0027, \u0027Keyword\u0027, 1, 1], [\u00273\u0027, \u0027Keyword\u0027, 20, 20], [\u0027http://t.co/sm36fgomja\u0027, \u0027Keyword\u0027, 1, 1], [\u0027imo:\u0027, \u0027Keyword\u0027, 1, 1], [\u0027first\u0027, \u0027Keyword\u0027, 19, 19], [\u0027ranked\u0027, \u0027Keyword\u0027, 3, 3], [\u0027talks\u0027, \u0027Keyword\u0027, 2, 2], [\u0027#jersey\u0027, \u0027Keyword\u0027, 1, 1], [\u0027http://t.co/stji1nyr7m\u0027, \u0027Keyword\u0027, 1, 1], [\u0027http://t.co/4k91aumlsw\\ntyler\u0027, \u0027Keyword\u0027, 1, 1], [\u0027reversed.\u0027, \u0027Keyword\u0027, 1, 1], [\u0027getting\u0027, \u0027Keyword\u0027, 20, 20], [\u0027says.\\nhttp://t.co/i4d49gpefu\u0027, \u0027Keyword\u0027, 1, 1], [\u0027http://t.co/cuqirikdhq\u0027, \u0027Keyword\u0027, 1, 1], [\u0027letroy\u0027, \u0027Keyword\u0027, 20, 20], [\u0027via\u0027, \u0027Keyword\u0027, 17, 17], [\u0027roger\u0027, \u0027Keyword\u0027, 2, 2], [\u0027\"@fblifert:\u0027, \u0027Keyword\u0027, 1, 1], [\u0027@espnnewyork:\u0027, \u0027Keyword\u0027, 1, 1], [\u0027...\u0027, \u0027Keyword\u0027, 4, 4], [\u0027internet\u0027, \u0027Keyword\u0027, 1, 1], [\u0027fine\u0027, \u0027Keyword\u0027, 4, 4], [\u0027http://t.co/knzbyffwzj\"\u0027, \u0027Keyword\u0027, 1, 1], [\u0027cbs.\u0027, \u0027Keyword\u0027, 16, 16], [\u0027season\u0027, \u0027Keyword\u0027, 1, 1], [\u0027#football\u0027, \u0027Keyword\u0027, 2, 2], [\u0027ever,\u0027, \u0027Keyword\u0027, 1, 1], [\u0027ever.\u0027, \u0027Keyword\u0027, 16, 16], [\u0027indeed\u0027, \u0027Keyword\u0027, 1, 1], [\u0027http://t.co/u8einec4nk\u0027, \u0027Keyword\u0027, 1, 1], [\u0027goodell\u0027, \u0027Keyword\u0027, 2, 2], [\u0027\\xe2\\x80\\x98free\u0027, \u0027Keyword\u0027, 1, 1], [\u0027sales\u0027, \u0027Keyword\u0027, 40, 40], [\u0027mom?\u0027, \u0027Keyword\u0027, 2, 2], [\"brady\u0027s\", \u0027Keyword\u0027, 4, 4], [\u0027madden\u0027, \u0027Keyword\u0027, 2, 2], [\u0027may:\u0027, \u0027Keyword\u0027, 1, 1], [\u0027http://t.co/ezc5qczjph\u0027, \u0027Keyword\u0027, 1, 1], [\u0027list:\u0027, \u0027Keyword\u0027, 1, 1], [\u0027(photo)\u0027, \u0027Keyword\u0027, 1, 1], [\u00272015\u0027, \u0027Keyword\u0027, 1, 1], [\u0027pushed\u0027, \u0027Keyword\u0027, 1, 1], [\u00272016\u0027, \u0027Keyword\u0027, 2, 2], [\u0027http://t.co/uxhoxeope2\u0027, \u0027Keyword\u0027, 1, 1], [\u0027going\u0027, \u0027Keyword\u0027, 2, 2], [\u0027brees\u0027, \u0027Keyword\u0027, 3, 3], [\u0027best\u0027, \u0027Keyword\u0027, 1, 1], [\u0027rt\u0027, \u0027Keyword\u0027, 59, 59], [\u0027defla...\u0027, \u0027Keyword\u0027, 1, 1], [\"\u0027silence,\u0027\", \u0027Keyword\u0027, 1, 1], [\u0027still\u0027, \u0027Keyword\u0027, 1, 1], [\u0027england\u0027, \u0027Keyword\u0027, 11, 11], [\u0027@maioccocsn:\u0027, \u0027Keyword\u0027, 3, 3], [\u0027qb\u0027, \u0027Keyword\u0027, 8, 8], [\u0027http://t.co/cvf3chozil\u0027, \u0027Keyword\u0027, 1, 1], [\u0027outpouring\u0027, \u0027Keyword\u0027, 1, 1], [\u0027#deflategate\u0027, \u0027Keyword\u0027, 1, 1], [\u0027alone.\u0027, \u0027Keyword\u0027, 1, 1], [\u0027possession\u0027, \u0027Keyword\u0027, 20, 20], [\u0027brady\\xe2\\x80\\x99\u0027, \u0027Keyword\u0027, 1, 1], [\u0027seguin\u0027, \u0027Keyword\u0027, 2, 2], [\u00272\u0027, \u0027Keyword\u0027, 3, 3], [\u0027\\nmerchandise\u0027, \u0027Keyword\u0027, 1, 1], [\u0027@espnboston)\u0027, \u0027Keyword\u0027, 3, 3], [\u0027large\u0027, \u0027Keyword\u0027, 5, 5], [\u0027version\u0027, \u0027Keyword\u0027, 1, 1], [\u0027@espnboston:\u0027, \u0027Keyword\u0027, 4, 4], [\u0027#patriots\u0027, \u0027Keyword\u0027, 1, 1], [\u0027new\u0027, \u0027Keyword\u0027, 11, 11], [\u0027nep\u0027, \u0027Keyword\u0027, 1, 1], [\u002750\u0027, \u0027Keyword\u0027, 1, 1], [\u0027no.\u0027, \u0027Keyword\u0027, 17, 17], [\u0027unfair\u0027, \u0027Keyword\u0027, 1, 1], [\u0027inquisitr\u0027, \u0027Keyword\u0027, 1, 1], [\u0027-\u0027, \u0027Keyword\u0027, 28, 28], [\u0027http://t.co/unfcwnuw3u\u0027, \u0027Keyword\u0027, 1, 1], [\u0027verge\u0027, \u0027Keyword\u0027, 1, 1], [\u0027howe\u0027, \u0027Keyword\u0027, 1, 1], [\u0027stuff\u0027, \u0027Keyword\u0027, 1, 1], [\u0027apparently\u0027, \u0027Keyword\u0027, 1, 1], [\u0027brady\\xe2\\x80\\x99s\u0027, \u0027Keyword\u0027, 1, 1], [\u0027patriots\\xe2\\x80\\x99\u0027, \u0027Keyword\u0027, 1, 1], [\u0027nfl\u0027, \u0027Keyword\u0027, 29, 29], [\"\u0027silence\u0027\", \u0027Keyword\u0027, 1, 1], [\u0027light\u0027, \u0027Keyword\u0027, 1, 1], [\u0027yup.\u0027, \u0027Keyword\u0027, 1, 1], [\u0027ben\u0027, \u0027Keyword\u0027, 2, 2], [\u0027http://t.co/fp4oqonk2q\u0027, \u0027Keyword\u0027, 1, 1], [\u0027http://t.co/vxpwooyvp0\u0027, \u0027Keyword\u0027, 1, 1], [\u0027@985thesportshub:\u0027, \u0027Keyword\u0027, 1, 1], [\u0027this...\u0027, \u0027Keyword\u0027, 20, 20], [\u0027http://t.c\\xe2\\x80\\xa6\u0027, \u0027Keyword\u0027, 1, 1], [\u0027aaron\u0027, \u0027Keyword\u0027, 2, 2], [\u0027blitz\u0027, \u0027Keyword\u0027, 2, 2], [\u0027\\xf0\\x9f\\x98\\x80yesss\u0027, \u0027Keyword\u0027, 1, 1], [\u0027sitting\u0027, \u0027Keyword\u0027, 1, 1], [\u0027boys\u0027, \u0027Keyword\u0027, 1, 1], [\u0027http://t.co/l1jrdbqsrd\u0027, \u0027Keyword\u0027, 1, 1], [\u0027sales:\u0027, \u0027Keyword\u0027, 4, 4], [\u0027will\u0027, \u0027Keyword\u0027, 1, 1], [\u0027sales,\u0027, \u0027Keyword\u0027, 3, 3], [\u0027terms\u0027, \u0027Keyword\u0027, 1, 1], [\u0027#sport\u0027, \u0027Keyword\u0027, 1, 1], [\u0027#news\u0027, \u0027Keyword\u0027, 1, 1], [\u0027@patriots\u0027, \u0027Keyword\u0027, 1, 1], [\u0027#guilty\u0027, \u0027Keyword\u0027, 1, 1], [\u0027ranks\u0027, \u0027Keyword\u0027, 10, 10], [\u0027guion\u0027, \u0027Keyword\u0027, 20, 20], [\u0027quarter\u0027, \u0027Keyword\u0027, 2, 2], [\u0027patriots\u0027, \u0027Keyword\u0027, 20, 20], [\u0027settlement\u0027, \u0027Keyword\u0027, 8, 8], [\u0027\"deflategate\"\u0027, \u0027Keyword\u0027, 1, 1], [\u0027rated\u0027, \u0027Keyword\u0027, 2, 2], [\u0027http://t.co/p16gyw1td2\u0027, \u0027Keyword\u0027, 1, 1], [\u0027alford\u0027, \u0027Keyword\u0027, 1, 1], [\u0027@pastapadre:\u0027, \u0027Keyword\u0027, 2, 2], [\u0027#nfl\u0027, \u0027Keyword\u0027, 5, 5], [\u0027http://t.co/ejcp8fgf59\u0027, \u0027Keyword\u0027, 1, 1], [\u0027capitals/yankees\u0027, \u0027Keyword\u0027, 1, 1], [\u0027migos\u0027, \u0027Keyword\u0027, 1, 1], [\u0027merch\u0027, \u0027Keyword\u0027, 1, 1], [\u0027lieu\u0027, \u0027Keyword\u0027, 4, 4], [\u0027sourced\u0027, \u0027Keyword\u0027, 4, 4], [\u0027sources\u0027, \u0027Keyword\u0027, 1, 1], [\u0027pay\u0027, \u0027Keyword\u0027, 4, 4], [\u0027reps\u0027, \u0027Keyword\u0027, 1, 1], [\u00271\u0027, \u0027Keyword\u0027, 16, 16], [\u0027@alexmarvez:\u0027, \u0027Keyword\u0027, 1, 1], [\u0027old.\u0027, \u0027Keyword\u0027, 1, 1], [\u0027year\u0027, \u0027Keyword\u0027, 2, 2], [\u0027http://t.co/t7fczltgzh\u0027, \u0027Keyword\u0027, 1, 1], [\u0027list\u0027, \u0027Keyword\u0027, 12, 12], [\u0027winner,\u0027, \u0027Keyword\u0027, 5, 5], [\u0027balls\u0027, \u0027Keyword\u0027, 1, 1], [\u0027union\u0027, \u0027Keyword\u0027, 10, 10], [\u0027@gfbiii\u0027, \u0027Keyword\u0027, 1, 1], [\u0027@shareaholic\u0027, \u0027Keyword\u0027, 1, 1], [\u0027get\u0027, \u0027Keyword\u0027, 1, 1], [\u0027may\u0027, \u0027Keyword\u0027, 1, 1], [\u0027win\u0027, \u0027Keyword\u0027, 2, 2], [\u0027judy\u0027, \u0027Keyword\u0027, 1, 1], [\u0027met\u0027, \u0027Keyword\u0027, 2, 2], [\u0027http://t.co/49qq7x7zhz\u0027, \u0027Keyword\u0027, 1, 1], [\u0027http://t.co/e4snvsjq8n\u0027, \u0027Keyword\u0027, 1, 1], [\u0027reflects\u0027, \u0027Keyword\u0027, 1, 1], [\u0027http://t.co/lbxvy52zts\u0027, \u0027Keyword\u0027, 1, 1], [\u002725,\u0027, \u0027Keyword\u0027, 1, 1], [\u0027gear\u0027, \u0027Keyword\u0027, 1, 1], [\u0027@matthewreeder13\u0027, \u0027Keyword\u0027, 1, 1], [\u0027http://t.co/ppcipjjvca\u0027, \u0027Keyword\u0027, 3, 3], [\u0027colin\u0027, \u0027Keyword\u0027, 3, 3], [\u0027popular\u0027, \u0027Keyword\u0027, 1, 1], [\u0027using\u0027, \u0027Keyword\u0027, 1, 1], [\u0027too:\u0027, \u0027Keyword\u0027, 5, 5], [\u0027\\xe2\\x80\\x93\u0027, \u0027Keyword\u0027, 1, 1]]\n        );\n\n        tree \u003d new google.visualization.TreeMap(document.getElementById(\u0027chart_div\u0027));\n\n        function showFullTooltip(row, size, value) {\n            return \u0027\u003cdiv style\u003d\"background:#fd9; padding:10px; border-style:solid\"\u003e\u0027 +\n                   \u0027\u003cspan style\u003d\"font-family:Courier\"\u003e\u003cb\u003e\u0027 + data.getValue(row, 0) +\n                   \u0027\u003c/b\u003e\u003cbr/\u003e\u0027 +\n                   \u0027Count: \u0027 + size + \u0027\u003cbr\u003e\u003c/div\u003e\u0027;\n          }\n\n        tree.draw(data, {\n          minColor: \u0027#0080ff\u0027,\n          midColor: \u0027#ddd\u0027,\n          maxColor: \u0027#0d0\u0027,\n          headerHeight: 15,\n          fontColor: \u0027black\u0027,\n          showScale: true,\n          generateTooltip: showFullTooltip\n        });\n\n      }\n\n    \u003c/script\u003e\n\n    \u003cdiv id\u003d\"chart_div\" style\u003d\"width: 400px; height: 400px;\"\u003e\u003c/div\u003e\n\n"
+      },
+      "dateCreated": "Aug 4, 2015 11:13:40 AM",
+      "dateStarted": "Aug 6, 2015 8:53:01 AM",
+      "dateFinished": "Aug 6, 2015 8:53:01 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1438876086212_383544607",
+      "id": "20150806-084806_912246544",
+      "dateCreated": "Aug 6, 2015 8:48:06 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "Google Chart",
+  "id": "2AUPDSGJC",
+  "angularObjects": {
+    "2ATDB6DPP": [],
+    "2ATX2UP3E": [],
+    "2ATJEEV3Z": [],
+    "2AUT5SWNG": [],
+    "2AV9JBN8B": [],
+    "2AUH78YGG": [],
+    "2AVK6ZW5M": [],
+    "2AW72AXBP": [],
+    "2AUV8UA7U": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}
